@@ -68,7 +68,11 @@ export const navbarConfig: NavbarConfig[] = [
     ],
   },
   {
-    label: "Login",
+    label: "Log in",
     href: "/login",
+  },
+  {
+    label: "Sign up",
+    href: "/signup",
   },
 ];

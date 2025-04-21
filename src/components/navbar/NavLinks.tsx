@@ -8,7 +8,7 @@ export default function NavLinks() {
     <div className="flex flex-row gap-4 items-center justify-center">
       {navbarConfig.map((link, index) =>
         link.dropdown === true ? (
-          <NavItemWithDropdown key={index} link={link} index={index} />
+          <NavItemWithDropdown key={index} link={link} />
         ) : (
           <Link key={index} href={link.href}>
             {link.label}
