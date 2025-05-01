@@ -1,4 +1,4 @@
-import FormElement from "@/components/auth/form";
+import FormElement from "@/components/auth/Form";
 
 export default function Signup() {
   return (

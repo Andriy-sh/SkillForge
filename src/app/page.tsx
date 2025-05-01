@@ -1,4 +1,4 @@
-import { SignOut } from "@/components/auth/signOut";
+import { SignOut } from "@/components/auth/SignOutButton";
 import { auth } from "../../auth";
 
 export default async function Page() {

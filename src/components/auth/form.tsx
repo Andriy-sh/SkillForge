@@ -18,7 +18,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { GoogleSignIn } from "./googleSignIn";
+import { GoogleLogin } from "./GoogleLoginButton";
+import { GithubLogin } from "./GithubLoginButton";
 
 type Props = {
   isSignup: boolean;
@@ -53,9 +54,12 @@ export default function FormElement({ isSignup, onSubmit }: Props) {
 
   return (
     <div className="w-full  max-w-md mx-auto p-6">
-      <div className="flex justify-center items-center">
-        <GoogleSignIn
+      <div className="flex flex-col justify-center space-y-1  items-center">
+        <GoogleLogin
           text={isSignup ? "Sign Up with Google" : "Log In with Google"}
+        />
+        <GithubLogin
+          text={isSignup ? "Sign Up with Github" : "Log In with Github"}
         />
       </div>
       <Form {...form}>
