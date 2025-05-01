@@ -6,7 +6,7 @@ export default async function Page() {
   return (
     <div>
       {session?.user?.email}
-      <SignOut />{" "}
+      <SignOut />
     </div>
   );
 }

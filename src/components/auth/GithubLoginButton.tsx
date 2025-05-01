@@ -10,9 +10,9 @@ export const GithubLogin: FC<GithubLoginProps> = ({ text }) => {
   return (
     <button
       onClick={() => signIn("github", { callbackUrl: "/" })}
-      className="flex w-52 text-center items-center gap-2 px-2 py-2 cursor-pointer rounded-md bg-white text-black shadow-md hover:shadow-lg"
+      className="flex border-2 text-center h-20 w-20 justify-center items-center gap-2 px-2 py-2 cursor-pointer rounded-md bg-white text-black shadow-md hover:shadow-lg"
     >
-      <Github size={20} />
+      <Github size={40} />
       {text}
     </button>
   );

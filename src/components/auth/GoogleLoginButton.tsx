@@ -12,9 +12,9 @@ export const GoogleLogin: FC<GoogleLoginProps> = ({ text }) => {
   return (
     <button
       onClick={() => signIn("google", { callbackUrl: "/" })}
-      className="flex w-52 text-center cursor-pointer items-center gap-2 px-2 py-2 rounded-md bg-white text-black shadow-md hover:shadow-lg"
+      className="flex border-2 text-center h-20 w-20 justify-center cursor-pointer items-center gap-2 px-2 py-2 rounded-md bg-white text-black shadow-md hover:shadow-lg"
     >
-      <FcGoogle size={20} />
+      <FcGoogle size={40} />
       {text}
     </button>
   );
