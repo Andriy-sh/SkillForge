@@ -20,13 +20,16 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { GoogleLogin } from "./GoogleLoginButton";
 import { GithubLogin } from "./GithubLoginButton";
+import { signUp } from "@/actions/User/signUp";
+import { signIn } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 type Props = {
   isSignup: boolean;
   onSubmit?: (data: AuthSchema | SignupSchema) => Promise<void>;
 };
 
-export default function FormElement({ isSignup, onSubmit }: Props) {
+export default function FormElement({ isSignup }: Props) {
   const form = useForm<AuthSchema | SignupSchema>({
     resolver: zodResolver(isSignup ? signupSchema : authSchema),
     defaultValues: {
@@ -37,21 +40,42 @@ export default function FormElement({ isSignup, onSubmit }: Props) {
   });
 
   const handleSubmit = async (data: AuthSchema | SignupSchema) => {
-    try {
-      if (onSubmit) {
-        await onSubmit(data);
-      } else {
-        const formData = new FormData();
-        Object.entries(data).forEach(([key, value]) => {
-          formData.append(key, value as string);
-        });
-        console.log("Form data:", Object.fromEntries(formData));
+    if (isSignup) {
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value as string);
+      });
+
+      try {
+        await signUp(formData);
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "An error occurred.";
+        if (message === "User already exists") {
+          form.setError("email", {
+            type: "manual",
+            message: "User with this email already exists.",
+          });
+        }
       }
-    } catch (error) {
-      console.error("Form submission error:", error);
+    } else {
+      const result = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        form.setError("password", {
+          type: "manual",
+          message: "Incorrect email or password.",
+        });
+        return;
+      }
+
+      redirect("/");
     }
   };
-
   return (
     <div className="w-full  max-w-md mx-auto p-6">
       <div className="flex flex-col justify-center space-y-1  items-center">
