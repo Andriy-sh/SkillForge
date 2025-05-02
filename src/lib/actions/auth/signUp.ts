@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { prisma } from "../../../prisma";
+import { prisma } from "../../../../prisma";
 import bcrypt from "bcryptjs";
 
 export async function signUp(formData: FormData) {

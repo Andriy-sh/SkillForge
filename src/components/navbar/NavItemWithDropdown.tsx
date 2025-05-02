@@ -35,6 +35,20 @@ export default function NavItemWithDropdown({ link }: Props) {
     };
   }, []);
 
+  useEffect(() => {
+    if (isOpen && dropdownRef.current) {
+      const dropdownElement = dropdownRef.current;
+      const rect = dropdownElement.getBoundingClientRect();
+
+      if (rect.right > window.innerWidth) {
+        dropdownElement.style.left = `calc(100% - ${rect.width}px)`;
+      }
+      if (rect.left < 0) {
+        dropdownElement.style.left = "0px";
+      }
+    }
+  });
+
   return (
     <div ref={dropdownRef} className="relative">
       <button
@@ -50,7 +64,10 @@ export default function NavItemWithDropdown({ link }: Props) {
       </button>
 
       {isOpen && (
-        <div className="absolute top-9 left-0 mt-2 w-[600px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg transform transition-all duration-200 ease-in-out animate-fadeIn">
+        <div
+          ref={dropdownRef}
+          className="absolute top-9 left-0 mt-2 w-[600px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg transform "
+        >
           <div className="grid grid-cols-3 gap-4 p-4">
             {link.dropdownItems?.map((dropdown, index) => (
               <Link

@@ -15,6 +15,9 @@ export default function Footer() {
       ? "bg-purple-500"
       : "bg-gray-300";
 
+  if (pathname === "/login" || pathname === "/signup") {
+    return null;
+  }
   return (
     <footer className={`w-full h-[200px] ${backgroundColor} text-white`}>
       Footer

@@ -15,8 +15,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { GoogleLogin } from "./GoogleLoginButton";
 import { GithubLogin } from "./GithubLoginButton";
-import { signUp } from "@/actions/User/signUp";
-import { signIn } from "next-auth/react";
+import { signUp } from "@/lib/actions/auth/signUp";
 import { redirect } from "next/navigation";
 import {
   authSchema,
@@ -25,6 +24,7 @@ import {
   SignupSchema,
 } from "@/schemas/auth";
 import { Facebook, Gitlab } from "lucide-react";
+import { signInAction } from "@/lib/actions/auth/signIn";
 
 type Props = {
   isSignup: boolean;
@@ -41,12 +41,13 @@ export default function FormElement({ isSignup }: Props) {
   });
 
   const handleSubmit = async (data: AuthSchema | SignupSchema) => {
+    const formData = new FormData();
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    if ("name" in data) {
+      formData.append("name", data.name);
+    }
     if (isSignup) {
-      const formData = new FormData();
-      Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, value as string);
-      });
-
       try {
         await signUp(formData);
       } catch (error) {
@@ -60,20 +61,17 @@ export default function FormElement({ isSignup }: Props) {
         }
       }
     } else {
-      const result = await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-      });
+      const result = await signInAction(formData);
 
-      if (result?.error) {
+      if (!result?.success) {
         form.setError("password", {
           type: "manual",
-          message: "Incorrect email or password.",
+          message: result?.message || "Incorrect email or password.",
         });
         return;
       }
 
+      window.location.reload();
       redirect("/");
     }
   };

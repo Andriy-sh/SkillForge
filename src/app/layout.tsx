@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReactQueryProvider>
           <NavBar />
-          <main className="bg-background "> {children}</main>
+          <main className="bg-background min-h-[93vh]"> {children}</main>
           <LazyFooter />
         </ReactQueryProvider>
       </body>
