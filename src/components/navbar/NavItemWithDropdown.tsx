@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 
 type Props = {
   link: {
@@ -38,38 +39,28 @@ export default function NavItemWithDropdown({ link }: Props) {
     <div ref={dropdownRef} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1  text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white transition-all duration-200 ease-in-out  dark:hover:bg-gray-800 rounded-md"
+        className="flex items-center gap-1  cursor-pointer text-lg font-semibold text-gray-700 hover:text-blue-500 transition-colors duration-200 dark:text-gray-200 dark:hover:text-white ease-in-out  dark:hover:bg-gray-800 rounded-md"
       >
         <span>{link.label}</span>
-        <svg
+        <ChevronDown
           className={`w-4 h-4 transition-transform duration-200 ease-in-out ${
             isOpen ? "rotate-180" : ""
           }`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-[600px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg transform transition-all duration-200 ease-in-out animate-fadeIn">
+        <div className="absolute top-9 left-0 mt-2 w-[600px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg transform transition-all duration-200 ease-in-out animate-fadeIn">
           <div className="grid grid-cols-3 gap-4 p-4">
             {link.dropdownItems?.map((dropdown, index) => (
               <Link
                 key={index}
                 href={dropdown.href}
-                className="flex items-center gap-2 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 ease-in-out group"
+                className="flex  items-center gap-2 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 ease-in-out group"
                 onClick={() => setIsOpen(false)}
               >
                 <div className="w-full">
-                  <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                  <div className="font-medium  text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
                     {dropdown.label}
                   </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-200">

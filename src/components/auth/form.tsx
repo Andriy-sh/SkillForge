@@ -158,7 +158,7 @@ export default function FormElement({ isSignup }: Props) {
           {isSignup ? "Or sign up using:" : "Or sign in using:"}
         </div>
 
-        <div className="grid grid-cols-4 h-40   justify-center items-center gap-2">
+        <div className="grid grid-cols-4 h-20   justify-center items-center gap-2">
           <GoogleLogin />
 
           <GithubLogin />

@@ -3,10 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/utils/providers/ReactQueryProvider";
 import NavBar from "@/components/navbar/NavBar";
-import Footer from "@/components/footer/Footer";
+import dynamic from "next/dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
-
+const LazyFooter = dynamic(() => import("@/components/footer/Footer"), {});
 export const metadata: Metadata = {
   title: "React Query App Movies",
   description: "Aplication using React Query to get Movies from TMDB",
@@ -23,7 +23,7 @@ export default function RootLayout({
         <ReactQueryProvider>
           <NavBar />
           <main className="bg-background "> {children}</main>
-          <Footer />
+          <LazyFooter />
         </ReactQueryProvider>
       </body>
     </html>

@@ -1,5 +1,23 @@
+"use client";
+
 import React from "react";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
-  return <footer className="w-full bg-red-300 h-[200px]">Footer</footer>;
+  const pathname = usePathname();
+
+  const backgroundColor =
+    pathname === "/"
+      ? "bg-blue-500"
+      : pathname === "/signup"
+      ? "bg-green-500"
+      : pathname === "/login"
+      ? "bg-purple-500"
+      : "bg-gray-300";
+
+  return (
+    <footer className={`w-full h-[200px] ${backgroundColor} text-white`}>
+      Footer
+    </footer>
+  );
 }
