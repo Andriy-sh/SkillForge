@@ -2,8 +2,8 @@ import { NavbarConfig } from "@/types/navbar";
 
 export const navbarConfig: NavbarConfig[] = [
   {
-    label: "Home",
-    href: "/",
+    label: "My Home",
+    href: "/learn",
   },
   {
     label: "Courses",

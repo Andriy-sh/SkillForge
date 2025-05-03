@@ -22,7 +22,7 @@ export default async function NavBar() {
     : navbarConfig;
 
   return (
-    <header className="flex h-[7vh] sticky top-0 justify-around items-center bg-background">
+    <header className="flex h-[7vh] sticky top-0 justify-around items-center bg-background z-50">
       <div className="flex flex-row items-center space-x-4 px-4">
         <Link href={"/"} className="flex items-center">
           <Image
