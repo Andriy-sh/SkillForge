@@ -5,6 +5,9 @@ type UserStore = {
   user: User | null;
   setUser: (user: User) => void;
   updateUserId: (id: string) => void;
+  updateUserEmail: (email: string) => void;
+  updateUserName: (name: string) => void;
+  updateUserBio: (bio: string) => void;
 };
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -13,5 +16,17 @@ export const useUserStore = create<UserStore>((set) => ({
   updateUserId: (id) =>
     set((state) => ({
       user: state.user ? { ...state.user, id } : null,
+    })),
+  updateUserEmail: (email) =>
+    set((state) => ({
+      user: state.user ? { ...state.user, email } : null,
+    })),
+  updateUserName: (name) =>
+    set((state) => ({
+      user: state.user ? { ...state.user, name } : null,
+    })),
+  updateUserBio: (bio) =>
+    set((state) => ({
+      user: state.user ? { ...state.user, bio } : null,
     })),
 }));

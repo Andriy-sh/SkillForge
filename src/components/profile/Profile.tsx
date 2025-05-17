@@ -58,6 +58,9 @@ export default function Profile({
             : "Unknown"}
         </p>
       </div>
+      <div className="mt-4 text-sm ">
+        <p>{user.bio || "No bio provided"}</p>
+      </div>
     </div>
   );
 }
