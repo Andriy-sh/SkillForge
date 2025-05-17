@@ -55,12 +55,5 @@ export const navbarConfig: NavbarConfig[] = [
       { label: "Settings", href: "/dashboard/settings" },
     ],
   },
-  {
-    label: "Login",
-    href: "/login",
-  },
-  {
-    label: "Sign Up",
-    href: "/signup",
-  },
+
 ];

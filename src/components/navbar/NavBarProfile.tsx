@@ -3,10 +3,13 @@ import { User } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { SignOut } from "../auth/SignOutButton";
+import { navbarProfileConfig } from "./navbarProfile.config";
+import { useUserStore } from "@/lib/store/userStore";
 
-export default function NavBarProfile({ userId }: { userId: string }) {
+export default function NavBarProfile() {
   const [IsOpen, setIsOpen] = useState(false);
   const profileRef = React.useRef<HTMLDivElement>(null);
+  const userId = useUserStore((state) => state.user?.id);
 
   useEffect(() => {
     const handelClickOutside = (event: MouseEvent) => {
@@ -45,20 +48,17 @@ export default function NavBarProfile({ userId }: { userId: string }) {
           ref={profileRef}
           className="absolute top-[46px] left-0 flex flex-col bg-white shadow-lg rounded-lg p-4 w-60 notification z-50 border border-gray-200"
         >
-          <Link
-            href={`/profile/${userId}`}
-            onClick={() => setIsOpen(false)}
-            className="py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-          >
-            Profile
-          </Link>
-          <Link
-            href={"/settings"}
-            onClick={() => setIsOpen(false)}
-            className="py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-          >
-            Settings
-          </Link>
+          {navbarProfileConfig.map((link, index) => (
+            <Link
+              key={index}
+              href={link.href === "/profile" ? `/profile/${userId}` : link.href}
+              onClick={() => setIsOpen(false)}
+              className="py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+            >
+              {link.label}
+            </Link>
+          ))}
+
           <div className="mt-2">
             <SignOut text="Sign Out" />
           </div>

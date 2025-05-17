@@ -1,4 +1,4 @@
-import { getUserById } from "@/lib/actions/user/user";
+import { getUserById } from "@/lib/actions/user/getUser";
 import Profile from "@/components/profile/Profile";
 import React from "react";
 import { redirect } from "next/navigation";
@@ -18,7 +18,7 @@ export default async function page({ params }: { params: Params }) {
     <div className="flex flex-col ">
       {user && (
         <div className="grid grid-cols-[1fr_3fr] p-8">
-          <Profile user={user} />
+          <Profile user={user} session={session} />
           <Services />
         </div>
       )}

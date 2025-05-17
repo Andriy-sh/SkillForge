@@ -2,8 +2,17 @@ import { User } from "@/schemas/User/User";
 import Image from "next/image";
 import React from "react";
 import { formatDistanceToNow, format } from "date-fns";
+import { Session } from "next-auth";
+import Link from "next/link";
 
-export default function Profile({ user }: { user: User }) {
+export default function Profile({
+  user,
+  session,
+}: {
+  user: User;
+  session: Session;
+}) {
+  const isCurrentUser = user.email === session.user?.email;
   return (
     <div className="rounded-md  text-center">
       <div className="flex justify-center mb-4">
@@ -23,23 +32,27 @@ export default function Profile({ user }: { user: User }) {
       </div>
 
       <h2 className="text-xl font-bold text-gray-900 mb-1">
-        @{user.name || "Unknown"}
+        @{user.id || "Unknown"}
       </h2>
       <p className="text-gray-700 mb-4">{user.name || "No Name Provided"}</p>
-
-      <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50">
-        Edit Profile
-      </button>
+      {isCurrentUser && (
+        <Link
+          href={`/settings/profile`}
+          className="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50"
+        >
+          Edit Profile
+        </Link>
+      )}
 
       <div className="mt-4 text-sm text-gray-600">
         <p>
-          Last active
+          Last active{" "}
           {user.updatedAt
             ? formatDistanceToNow(new Date(user.updatedAt), { addSuffix: true })
             : "Unknown"}
         </p>
         <p>
-          Joined
+          Joined{" "}
           {user.createdAt
             ? format(new Date(user.createdAt), "MMMM d, yyyy")
             : "Unknown"}
