@@ -1,4 +1,4 @@
-import FormElement from "@/components/auth/Form";
+import FormElement from "../../../components/auth/Form";
 import { auth } from "../../../../auth";
 import { redirect } from "next/navigation";
 
