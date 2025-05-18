@@ -11,30 +11,30 @@ import {
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateUserBio } from "@/lib/actions/user/updateUser";
 import { useUserStore } from "@/lib/store/userStore";
 import { useState } from "react";
-import { userBio, UserBio } from "@/schemas/user";
+import { userCity, UserCity } from "@/schemas/user";
 import { Textarea } from "@/components/ui/textarea";
+import { updateUserCity } from "@/lib/actions/user/updateUser";
 
-export default function UserBioForm() {
+export default function UserCityForm() {
   const [isEditing, setIsEditing] = useState(false);
-  const currentBio = useUserStore((state) => state.user?.bio) ?? "";
+  const currentCity = useUserStore((state) => state.user?.city) ?? "";
   const currentUserId = useUserStore((state) => state.user?.id) ?? "";
 
-  const form = useForm<UserBio>({
-    resolver: zodResolver(userBio),
-    defaultValues: { bio: currentBio },
+  const form = useForm<UserCity>({
+    resolver: zodResolver(userCity),
+    defaultValues: { city: currentCity },
   });
-  const updateStoreUserBio = useUserStore((state) => state.updateUserBio);
-  const handleUpdate = async (data: { bio: string }) => {
+  const updateStoreUserCity = useUserStore((state) => state.updateUserCity);
+  const handleUpdate = async (data: { city: string }) => {
     try {
-      await updateUserBio(currentUserId, data.bio);
-      updateStoreUserBio(data.bio);
+      await updateUserCity(currentUserId, data.city);
+      updateStoreUserCity(data.city);
       setIsEditing(false);
-      form.reset({ bio: data.bio });
+      form.reset({ city: data.city });
     } catch (error) {
-      console.error("Error updating bio:", error);
+      console.error("Error updating city:", error);
     }
   };
 
@@ -44,16 +44,18 @@ export default function UserBioForm() {
         {!isEditing ? (
           <>
             <div className="flex items-center space-x-3">
-              <span className="text-xl font-bold text-gray-800">Bio</span>
+              <span className="text-xl font-bold text-gray-800">City</span>
               <button
                 type="button"
-                className="text-blue-700 hover:underline text-md font-bold "
+                className="text-blue-700 hover:underline text-md font-bold"
                 onClick={() => setIsEditing(true)}
               >
-                Change Bio
+                Change City
               </button>
             </div>
-            <span className="text-lg text-gray-600 w-100 wrap-anywhere">{currentBio}</span>
+            <span className="text-lg text-gray-600">
+              {currentCity || "No city set"}
+            </span>
           </>
         ) : null}
       </div>
@@ -65,21 +67,21 @@ export default function UserBioForm() {
           >
             <FormField
               control={form.control}
-              name="bio"
+              name="city"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-xl font-bold text-gray-800">
-                    Change Bio
+                    Change City
                   </FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter your new bio"
+                      placeholder="Lviv, Ukraine"
                       {...field}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                     />
                   </FormControl>
                   <FormDescription className="text-xs text-gray-400">
-                    This bio will be displayed on your profile.
+                    This city will be displayed on your profile.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -98,7 +100,7 @@ export default function UserBioForm() {
                 className="border-gray-300"
                 onClick={() => {
                   setIsEditing(false);
-                  form.reset({ bio: currentBio });
+                  form.reset({ city: currentCity });
                 }}
               >
                 Cancel

@@ -5,6 +5,7 @@ import UserEmailForm from "./UserEmailForm";
 import UserNameForm from "./UserNameForm";
 import UserPasswordForm from "./UserPasswordForm";
 import UserBioForm from "./UserBioForm";
+import UserCityForm from "./UserCityForm";
 
 export default function ProfileSettings() {
   return (
@@ -16,6 +17,7 @@ export default function ProfileSettings() {
         <UserIdForm />
         <UserBioForm />
         <UserPasswordForm />
+        <UserCityForm />
       </div>
       {/* <UserAvatarForm user={user} /> */}
       {/* <UserBioForm user={user} /> */}

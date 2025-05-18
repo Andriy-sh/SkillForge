@@ -13,9 +13,5 @@ export default async function Page() {
   // if (!user) {
   //   return <div>User not found</div>;
   // }
-  return (
-    <div >
-      <ProfileSettings />
-    </div>
-  );
+  return <ProfileSettings />;
 }

@@ -12,6 +12,7 @@ export default function SettingsSideBar() {
     { name: "Preferences", href: "/settings/preferences" },
     { name: "Security", href: "/settings/security" },
     { name: "Billing", href: "/settings/billing" },
+    { name: "Delete Account", href: "/settings/delete_account" },
   ];
 
   return (

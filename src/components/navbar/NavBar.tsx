@@ -8,6 +8,7 @@ import NavBarProfile from "./NavBarProfile";
 import { auth } from "../../../auth";
 import { navbarAuthConfig } from "./navbarAuth.config";
 import { getUserByEmail } from "@/lib/actions/user/getUser";
+import { getNotification } from "@/lib/actions/notification/getNotification";
 
 export default async function NavBar() {
   const session = await auth();
@@ -20,10 +21,11 @@ export default async function NavBar() {
         (link) => link.href !== "/signup" && link.href !== "/login"
       )
     : navbarConfig;
-
+  const notifications = await getNotification(user?.id || "");
+  console.log(notifications);
   return (
-    <header className="flex h-[7vh] sticky top-0 justify-around items-center bg-background z-50">
-      <div className="flex flex-row items-center space-x-20 px-4">
+    <header className="flex h-[9vh] sticky top-0 justify-around items-center bg-background z-50">
+      <div className="flex flex-row items-center px-4 w-full  justify-around ">
         <div className="flex space-x-4">
           <Link href={"/"} className="flex items-center">
             <Image
@@ -51,7 +53,7 @@ export default async function NavBar() {
         <div className="flex space-x-4">
           {session && user ? (
             <div className="flex items-center gap-4 flex-row">
-              <Notification />
+              <Notification notifications={notifications} />
               <NavBarProfile />
             </div>
           ) : (

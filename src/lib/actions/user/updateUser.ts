@@ -54,3 +54,10 @@ export const updateUserBio = async (userId: string, newBio: string) => {
     data: { bio: newBio },
   });
 };
+
+export const updateUserCity = async (userId: string, newCity: string) => {
+  await prisma.user.update({
+    where: { id: userId },
+    data: { city: newCity },
+  });
+};

@@ -1,32 +1,60 @@
 import React from "react";
 import { auth } from "../../../auth";
 import { prisma } from "../../../prisma";
-import Link from "next/link";
-
-interface User {
-  id: string;
-  name: string | null;
-  email: string;
-}
+import FriendList from "@/components/friends/FriendList";
 
 export default async function page() {
   const session = await auth();
   if (!session?.user) {
     return <div>You are not logged in</div>;
   }
-  const users: User[] = await prisma.user.findMany({});
+  const email = session.user.email;
+  if (!email) {
+    return <div>You are not logged in</div>;
+  }
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+    include: {
+      friendships: true,
+      friendsWith: true,
+    },
+  });
+  if (!user) {
+    return <div>User not found</div>;
+  }
+  const usersRaw = await prisma.user.findMany({
+    include: {
+      friendships: true,
+      friendsWith: true,
+    },
+  });
+
+  const allowedStatuses = ["pending", "accepted", "rejected"] as const;
+  const users = usersRaw.map((u) => ({
+    ...u,
+    friendships: u.friendships
+      .filter((f) =>
+        allowedStatuses.includes(f.status as (typeof allowedStatuses)[number])
+      )
+      .map((f) => ({
+        ...f,
+        status: f.status as (typeof allowedStatuses)[number],
+      })),
+    friendsWith: u.friendsWith
+      .filter((f) =>
+        allowedStatuses.includes(f.status as (typeof allowedStatuses)[number])
+      )
+      .map((f) => ({
+        ...f,
+        status: f.status as (typeof allowedStatuses)[number],
+      })),
+  }));
+
   return (
     <div>
-      {users.map(({ id, name, email }) => (
-        <Link
-          href={`/profile/${id}`}
-          key={id}
-          className="flex flex-col p-4 border-b border-gray-900 "
-        >
-          <h3>{name ?? "No name"}</h3>
-          <p>{email}</p>
-        </Link>
-      ))}
+      <FriendList users={users} currentUserId={user.id} />
     </div>
   );
 }

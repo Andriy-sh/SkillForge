@@ -17,13 +17,13 @@ type Props = {
 
 export default function NavItemWithDropdown({ link }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
       }
@@ -36,24 +36,28 @@ export default function NavItemWithDropdown({ link }: Props) {
   }, []);
 
   useEffect(() => {
-    if (isOpen && dropdownRef.current) {
-      const dropdownElement = dropdownRef.current;
-      const rect = dropdownElement.getBoundingClientRect();
-
-      if (rect.right > window.innerWidth) {
-        dropdownElement.style.left = `calc(100% - ${rect.width}px)`;
-      }
-      if (rect.left < 0) {
-        dropdownElement.style.left = "0px";
+    if (isOpen && containerRef.current) {
+      const dropdownElement = containerRef.current.querySelector(
+        ".dropdown-menu"
+      ) as HTMLDivElement | null;
+      if (dropdownElement) {
+        const rect = dropdownElement.getBoundingClientRect();
+        if (rect.right > window.innerWidth) {
+          dropdownElement.style.left = `calc(100% - ${rect.width}px)`;
+        }
+        if (rect.left < 0) {
+          dropdownElement.style.left = "0px";
+        }
       }
     }
-  });
+  }, [isOpen]);
 
   return (
-    <div ref={dropdownRef} className="relative">
+    <div ref={containerRef} className="relative">
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1  cursor-pointer text-lg font-semibold text-gray-700 hover:text-blue-500 transition-colors duration-200 dark:text-gray-200 dark:hover:text-white ease-in-out  dark:hover:bg-gray-800 rounded-md"
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="flex items-center gap-1 cursor-pointer text-lg font-semibold text-gray-700 hover:text-blue-500 transition-colors duration-200 dark:text-gray-200 dark:hover:text-white ease-in-out dark:hover:bg-gray-800 rounded-md"
       >
         <span>{link.label}</span>
         <ChevronDown
@@ -64,20 +68,17 @@ export default function NavItemWithDropdown({ link }: Props) {
       </button>
 
       {isOpen && (
-        <div
-          ref={dropdownRef}
-          className="absolute top-9 left-0 mt-2 w-[600px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg transform "
-        >
+        <div className="dropdown-menu absolute top-9 left-0 mt-2 w-[600px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg transform">
           <div className="grid grid-cols-3 gap-4 p-4">
             {link.dropdownItems?.map((dropdown, index) => (
               <Link
                 key={index}
                 href={dropdown.href}
-                className="flex  items-center gap-2 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 ease-in-out group"
+                className="flex items-center gap-2 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 ease-in-out group"
                 onClick={() => setIsOpen(false)}
               >
                 <div className="w-full">
-                  <div className="font-medium  text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                  <div className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
                     {dropdown.label}
                   </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-200">

@@ -4,8 +4,10 @@ import React from "react";
 import { formatDistanceToNow, format } from "date-fns";
 import { Session } from "next-auth";
 import Link from "next/link";
+import { getFriends } from "@/lib/actions/friendship/getFriends";
+import { Handshake } from "lucide-react";
 
-export default function Profile({
+export default async function Profile({
   user,
   session,
 }: {
@@ -13,16 +15,17 @@ export default function Profile({
   session: Session;
 }) {
   const isCurrentUser = user.email === session.user?.email;
+  const friends = await getFriends(user.id);
   return (
-    <div className="rounded-md  text-center">
-      <div className="flex justify-center mb-4">
+    <div className="rounded-md  text-start wrap-anywhere">
+      <div className="flex justify-start mb-4">
         {user.image ? (
           <Image
             src={user.image}
             alt="User Avatar"
-            className="w-24 h-24 rounded-full"
-            width={96}
-            height={96}
+            className="w-36 h-36 rounded-full"
+            width={144}
+            height={144}
           />
         ) : (
           <div className="w-24 h-24 rounded-full bg-purple-500 flex items-center justify-center text-white text-2xl font-bold">
@@ -44,22 +47,42 @@ export default function Profile({
         </Link>
       )}
 
-      <div className="mt-4 text-sm text-gray-600">
-        <p>
-          Last active{" "}
-          {user.updatedAt
-            ? formatDistanceToNow(new Date(user.updatedAt), { addSuffix: true })
-            : "Unknown"}
-        </p>
-        <p>
-          Joined{" "}
-          {user.createdAt
-            ? format(new Date(user.createdAt), "MMMM d, yyyy")
-            : "Unknown"}
-        </p>
-      </div>
-      <div className="mt-4 text-sm ">
-        <p>{user.bio || "No bio provided"}</p>
+      <div className="text-start">
+        <div className="mt-4 text-sm ">
+          <p>
+            <span className="font-bold flex ">
+              <Handshake /> {friends.length} · friends
+            </span>
+          </p>
+        </div>
+        <div className="mt-4 text-sm  ">
+          <p>
+            <span className="font-bold">Bio:</span>{" "}
+            {user.bio || "No bio provided"}
+          </p>
+        </div>
+        <div className="mt-4 text-sm ">
+          <p>
+            <span className="font-bold">City:</span>{" "}
+            {user.city || "No city provided"}
+          </p>
+        </div>
+        <div className="mt-4 text-sm text-gray-600">
+          <p>
+            Last active{" "}
+            {user.updatedAt
+              ? formatDistanceToNow(new Date(user.updatedAt), {
+                  addSuffix: true,
+                })
+              : "Unknown"}
+          </p>
+          <p>
+            Joined{" "}
+            {user.createdAt
+              ? format(new Date(user.createdAt), "MMMM d, yyyy")
+              : "Unknown"}
+          </p>
+        </div>
       </div>
     </div>
   );

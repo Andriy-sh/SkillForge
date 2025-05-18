@@ -8,6 +8,7 @@ type UserStore = {
   updateUserEmail: (email: string) => void;
   updateUserName: (name: string) => void;
   updateUserBio: (bio: string) => void;
+  updateUserCity: (city: string) => void;
 };
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -28,5 +29,9 @@ export const useUserStore = create<UserStore>((set) => ({
   updateUserBio: (bio) =>
     set((state) => ({
       user: state.user ? { ...state.user, bio } : null,
+    })),
+  updateUserCity: (city) =>
+    set((state) => ({
+      user: state.user ? { ...state.user, city } : null,
     })),
 }));

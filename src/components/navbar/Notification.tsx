@@ -1,8 +1,14 @@
 "use client";
+// import { updateFriendship } from "@/lib/actions/friendship/updateFriendship";
+import { NotificationSchema } from "@/schemas/notification/notification";
 import { Bell, X } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function Notification() {
+export default function Notification({
+  notifications,
+}: {
+  notifications: NotificationSchema[];
+}) {
   const [IsOpen, setIsOpen] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
 
@@ -33,7 +39,13 @@ export default function Notification() {
       }
     }
   }, [IsOpen]);
-
+  // const handleFriendRequest = (notificationId: string) => {
+  //   try {
+  //     await updateFriendship(notificationId, "accepted");
+  //   } catch (error) {
+  //     console.error("Error handling friend request:", error);
+  //   }
+  // };
   return (
     <div className="relative">
       <button className="mt-2 cursor-pointer" onClick={() => setIsOpen(true)}>
@@ -42,7 +54,7 @@ export default function Notification() {
       {IsOpen && (
         <div
           ref={notificationRef}
-          className="absolute left-0 top-[46px] bg-white shadow-lg rounded-md p-4 w-64 notification"
+          className="absolute left-2 top-[46px] bg-white shadow-lg rounded-md p-4 w-64 notification"
         >
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-semibold">My Notifications</h2>
@@ -53,14 +65,22 @@ export default function Notification() {
               <X />
             </button>
           </div>
-          <hr className="my-2 border-dashed" />
-          <div className="flex flex-col items-center text-center mt-4">
-            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"></div>
-            <p className="text-gray-600 mt-4">You&apos;re all caught up!</p>
-            <p className="text-gray-500 text-sm">
-              Go forth and learn new things.
-            </p>
-          </div>
+          {notifications.map((notification) => (
+            <div key={notification.id} className="my-2">
+              <p className="text-gray-800">{notification.message}</p>
+              <p className="text-sm text-gray-500">{notification.type}</p>
+              <button
+                onClick={() => {}}
+                className="text-sm text-blue-500 hover:underline"
+              >
+                {notification.type === "friendRequest" ? "Accept" : "View"}
+              </button>
+              <p className="text-sm text-gray-500">
+                {new Date(notification.createdAt).toLocaleString()}
+              </p>
+              <hr className="my-2" />
+            </div>
+          ))}
         </div>
       )}
     </div>

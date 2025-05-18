@@ -4,7 +4,7 @@ export const userId = z.object({
   id: z
     .string()
     .min(1, "User ID is required")
-    .max(30, "User ID must be at most 30 characters long")
+    .max(24, "User ID must be at most 24 characters long")
     .regex(/^[a-zA-Z0-9]+$/, "User ID must be alphanumeric"),
 });
 export type UserId = z.infer<typeof userId>;
@@ -18,7 +18,7 @@ export const userName = z.object({
   name: z
     .string()
     .min(1, "Name is required")
-    .max(50, "Name must be at most 50 characters long"),
+    .max(24, "Name must be at most 24 characters long"),
 });
 export type UserName = z.infer<typeof userName>;
 
@@ -40,3 +40,8 @@ export const userBio = z.object({
   bio: z.string().max(160, "Bio must be at most 160 characters long"),
 });
 export type UserBio = z.infer<typeof userBio>;
+
+export const userCity = z.object({
+  city: z.string().max(50, "City must be at most 50 characters long"),
+});
+export type UserCity = z.infer<typeof userCity>;

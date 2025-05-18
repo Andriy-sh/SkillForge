@@ -15,9 +15,9 @@ export default async function page({ params }: { params: Params }) {
   const { userId } = await params;
   const user = await getUserById(userId);
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col max-w-[1350px] mx-auto">
       {user && (
-        <div className="grid grid-cols-[1fr_3fr] p-8">
+        <div className="grid grid-cols-[1fr_4fr] gap-10 p-8">
           <Profile user={user} session={session} />
           <Services />
         </div>

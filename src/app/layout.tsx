@@ -27,7 +27,7 @@ export default async function RootLayout({
       <body className={inter.className}>
         <UserProvider user={user}>
           <NavBar />
-          <main className="bg-background min-h-[93vh]"> {children}</main>
+          <main className="bg-background min-h-[91vh]"> {children}</main>
           <LazyFooter />
         </UserProvider>
       </body>
