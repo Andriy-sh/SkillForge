@@ -5,7 +5,6 @@ import { createFriendship } from "@/lib/actions/friendship/createFriendship";
 import { User } from "@/schemas/User/User";
 import { Status } from "@prisma/client";
 import { createNotification } from "@/lib/actions/notification/createNotification";
-
 export default function FriendList({
   users,
   currentUserId,
@@ -24,10 +23,10 @@ export default function FriendList({
     try {
       await createFriendship(currentUserId, friendId);
       await createNotification({
-        userId: currentUserId,
+        receiverId: friendId,
         type: "friendRequest",
         message: "You have a new friend request.",
-        senderId: friendId,
+        senderId: currentUserId,
       });
       setSentRequests((prev) => ({ ...prev, [friendId]: "pending" }));
     } catch (error) {

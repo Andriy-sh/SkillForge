@@ -5,7 +5,7 @@ import { prisma } from "../../../../prisma";
 export const getNotification = async (userId: string) => {
   return await prisma.notification.findMany({
     where: {
-      userId,
+      receiverId: userId,
     },
   });
 };

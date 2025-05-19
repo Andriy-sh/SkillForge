@@ -1,24 +1,17 @@
 "use server";
-import { Notification } from "@prisma/client";
 import { prisma } from "../../../../prisma";
-
-interface NotificationInput {
-  userId: string;
-  senderId: string;
-  type: Notification["type"];
-  message: string;
-}
+import { NotificationInput } from "@/schemas/notification/notification";
 
 export const createNotification = async ({
-  userId,
+  receiverId,
   senderId,
   type,
   message,
 }: NotificationInput) => {
   await prisma.notification.create({
     data: {
-      userId: userId,
-      senderId: senderId,
+      receiverId,
+      senderId,
       type,
       message,
     },

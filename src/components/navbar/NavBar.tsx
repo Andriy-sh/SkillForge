@@ -22,7 +22,6 @@ export default async function NavBar() {
       )
     : navbarConfig;
   const notifications = await getNotification(user?.id || "");
-  console.log(notifications);
   return (
     <header className="flex h-[9vh] sticky top-0 justify-around items-center bg-background z-50">
       <div className="flex flex-row items-center px-4 w-full  justify-around ">
