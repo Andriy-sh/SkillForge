@@ -1,5 +1,6 @@
 "use client";
-// import { updateFriendship } from "@/lib/actions/friendship/updateFriendship";
+import { updateFriendship } from "@/lib/actions/friendship/updateFriendship";
+import { readNotification } from "@/lib/actions/notification/updateNotification";
 import { NotificationSchema } from "@/schemas/notification/notification";
 import { Bell, X } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
@@ -11,7 +12,9 @@ export default function Notification({
 }) {
   const [IsOpen, setIsOpen] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
-
+  const [stateNotifications, setNotification] = useState<NotificationSchema[]>(
+    []
+  );
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -39,13 +42,27 @@ export default function Notification({
       }
     }
   }, [IsOpen]);
-  // const handleFriendRequest = (notificationId: string) => {
-  //   try {
-  //     await updateFriendship(notificationId, "accepted");
-  //   } catch (error) {
-  //     console.error("Error handling friend request:", error);
-  //   }
-  // };
+  const handleFriendRequest = async (
+    senderid: string,
+    reciverid: string,
+    notificationId: string
+  ) => {
+    try {
+      setNotification((prev) =>
+        prev.filter((notification) => notification.id !== notificationId)
+      );
+      await updateFriendship(senderid, reciverid, "accepted");
+      await readNotification(notificationId);
+    } catch (error) {
+      console.error("Error handling friend request:", error);
+    }
+  };
+  useEffect(() => {
+    const filterNotifications = notifications.filter((notification) => {
+      return notification.read === false;
+    });
+    setNotification(filterNotifications);
+  }, [notifications]);
   return (
     <div className="relative">
       <button className="mt-2 cursor-pointer" onClick={() => setIsOpen(true)}>
@@ -65,12 +82,18 @@ export default function Notification({
               <X />
             </button>
           </div>
-          {notifications.map((notification) => (
+          {stateNotifications.map((notification) => (
             <div key={notification.id} className="my-2">
               <p className="text-gray-800">{notification.message}</p>
               <p className="text-sm text-gray-500">{notification.type}</p>
               <button
-                onClick={() => {}}
+                onClick={() => {
+                  handleFriendRequest(
+                    notification.senderId || "",
+                    notification.receiverId || "",
+                    notification.id
+                  );
+                }}
                 className="text-sm text-blue-500 hover:underline"
               >
                 {notification.type === "friendRequest" ? "Accept" : "View"}

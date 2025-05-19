@@ -4,12 +4,16 @@ import { Status } from "@prisma/client";
 import { prisma } from "../../../../prisma";
 
 export const updateFriendship = async (
-  friendshipId: string,
+  senderid: string,
+  reciverid: string,
   status: Status
 ) => {
   await prisma.friendship.update({
     where: {
-      id: friendshipId,
+      userId_friendId: {
+        userId: senderid,
+        friendId: reciverid,
+      },
     },
     data: {
       status,

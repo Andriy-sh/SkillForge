@@ -5,6 +5,7 @@ import { createFriendship } from "@/lib/actions/friendship/createFriendship";
 import { User } from "@/schemas/User/User";
 import { Status } from "@prisma/client";
 import { createNotification } from "@/lib/actions/notification/createNotification";
+import Link from "next/link";
 export default function FriendList({
   users,
   currentUserId,
@@ -90,7 +91,8 @@ export default function FriendList({
         </div>
       ) : (
         filteredUsers.map((user) => (
-          <div
+          <Link
+            href={`/profile/${user.id}`}
             key={user.id}
             className="flex flex-col md:flex-row md:items-center justify-between p-4 mb-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm"
           >
@@ -117,7 +119,7 @@ export default function FriendList({
                 {getFriendshipStatus(user)}
               </div>
             </div>
-          </div>
+          </Link>
         ))
       )}
     </div>
