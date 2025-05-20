@@ -20,3 +20,13 @@ export const updateFriendship = async (
     },
   });
 };
+
+export async function updateFriendshipById(
+  friendshipId: string,
+  status: Status
+) {
+  return prisma.friendship.update({
+    where: { id: friendshipId },
+    data: { status },
+  });
+}

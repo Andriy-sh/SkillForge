@@ -1,3 +1,5 @@
+import { Status } from "@prisma/client";
+
 export interface User {
   id: string;
   name: string | null;
@@ -13,7 +15,7 @@ export interface User {
     id: string;
     userId: string;
     friendId: string;
-    status: "pending" | "accepted" | "rejected";
+    status: Status;
     createdAt: Date;
     updatedAt: Date;
   }[];
@@ -21,7 +23,7 @@ export interface User {
     id: string;
     userId: string;
     friendId: string;
-    status: "pending" | "accepted" | "rejected";
+    status: Status;
     createdAt: Date;
     updatedAt: Date;
   }[];

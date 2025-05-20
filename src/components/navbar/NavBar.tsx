@@ -7,8 +7,9 @@ import Notification from "./Notification";
 import NavBarProfile from "./NavBarProfile";
 import { auth } from "../../../auth";
 import { navbarAuthConfig } from "./navbarAuth.config";
-import { getUserByEmail } from "@/lib/actions/user/getUser";
+import { getUserByEmail, getUserById } from "@/lib/actions/user/getUser";
 import { getNotification } from "@/lib/actions/notification/getNotification";
+import { User } from "@/schemas/User/User";
 
 export default async function NavBar() {
   const session = await auth();
@@ -22,6 +23,14 @@ export default async function NavBar() {
       )
     : navbarConfig;
   const notifications = await getNotification(user?.id || "");
+
+  const sendersIds = notifications.map((n) => n.senderId).filter(Boolean);
+
+  const senders = sendersIds.length
+    ? ((
+        await Promise.all(sendersIds.map((id) => getUserById(id as string)))
+      ).filter(Boolean) as User[])
+    : [];
   return (
     <header className="flex h-[9vh] sticky top-0 justify-around items-center bg-background z-50">
       <div className="flex flex-row items-center px-4 w-full  justify-around ">
@@ -52,7 +61,7 @@ export default async function NavBar() {
         <div className="flex space-x-4">
           {session && user ? (
             <div className="flex items-center gap-4 flex-row">
-              <Notification notifications={notifications} />
+              <Notification notifications={notifications} senders={senders} />
               <NavBarProfile />
             </div>
           ) : (

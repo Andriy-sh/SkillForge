@@ -6,6 +6,7 @@ import { User } from "@/schemas/User/User";
 import { Status } from "@prisma/client";
 import { createNotification } from "@/lib/actions/notification/createNotification";
 import Link from "next/link";
+import { updateFriendshipById } from "@/lib/actions/friendship/updateFriendship";
 export default function FriendList({
   users,
   currentUserId,
@@ -22,11 +23,31 @@ export default function FriendList({
   const handleSendFriendRequest = async (friendId: string) => {
     setLoadingId(friendId);
     try {
-      await createFriendship(currentUserId, friendId);
+      const user = users.find((u) => u.id === friendId);
+      const friendship = user?.friendsWith?.find(
+        (f) =>
+          (f.userId === currentUserId && f.friendId === friendId) ||
+          (f.userId === friendId && f.friendId === currentUserId)
+      );
+
+      if (
+        friendship?.status === "accepted" ||
+        friendship?.status === "blocked"
+      ) {
+        setLoadingId(null);
+        return;
+      }
+
+      if (friendship && friendship.status === "rejected") {
+        await updateFriendshipById(friendship.id, "pending");
+      } else {
+        await createFriendship(currentUserId, friendId);
+      }
+
       await createNotification({
         receiverId: friendId,
         type: "friendRequest",
-        message: "You have a new friend request.",
+        message: "sent a friend request",
         senderId: currentUserId,
       });
       setSentRequests((prev) => ({ ...prev, [friendId]: "pending" }));
@@ -47,6 +68,7 @@ export default function FriendList({
     if (friendship) {
       if (friendship.status === "accepted") return "Friend";
       if (friendship.status === "pending") return "Pending Confirmation";
+      if (friendship.status === "rejected") return "You was rejected";
     }
     if (sentRequests[user.id] === "pending") return "Pending Confirmation";
     return null;
@@ -91,22 +113,28 @@ export default function FriendList({
         </div>
       ) : (
         filteredUsers.map((user) => (
-          <Link
-            href={`/profile/${user.id}`}
+          <div
             key={user.id}
             className="flex flex-col md:flex-row md:items-center justify-between p-4 mb-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm"
           >
             <div>
-              <h3 className="font-semibold text-lg text-gray-800">
+              <Link
+                href={`/profile/${user.id}`}
+                className="text-lg font-bold hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
                 {user.name ?? "No name"}
-              </h3>
+              </Link>
               <p className="text-gray-600 text-sm">{user.email}</p>
               <p className="text-xs text-gray-400">ID: {user.id}</p>
             </div>
             <div className="flex flex-col items-start md:items-end mt-2 md:mt-0">
               <Button
                 className="w-40 mb-1"
-                onClick={() => handleSendFriendRequest(user.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSendFriendRequest(user.id);
+                }}
                 disabled={isRequestSent(user)}
               >
                 {loadingId === user.id
@@ -115,11 +143,12 @@ export default function FriendList({
                   ? "Request Sent"
                   : "Add Friend"}
               </Button>
+
               <div className="mt-1 text-sm text-gray-500">
                 {getFriendshipStatus(user)}
               </div>
             </div>
-          </Link>
+          </div>
         ))
       )}
     </div>
