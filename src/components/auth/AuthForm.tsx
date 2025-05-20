@@ -70,7 +70,6 @@ export default function FormElement({ isSignup }: Props) {
         });
         return;
       }
-
       window.location.reload();
       redirect("/");
     }

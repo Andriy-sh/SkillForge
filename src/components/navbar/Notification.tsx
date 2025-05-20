@@ -7,6 +7,7 @@ import { Bell, CircleOff, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import EmptyNotification from "../notification/EmptyNotification";
 
 export default function Notification({
   notifications,
@@ -20,6 +21,10 @@ export default function Notification({
   const [stateNotifications, setNotification] = useState<NotificationSchema[]>(
     []
   );
+  const [displayedNotifications, setDisplayedNotifications] = useState<
+    NotificationSchema[]
+  >([]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -47,6 +52,7 @@ export default function Notification({
       }
     }
   }, [IsOpen]);
+
   const handleFriendRequest = async (
     senderid: string,
     reciverid: string,
@@ -54,9 +60,13 @@ export default function Notification({
     action: "accepted" | "rejected" | "blocked"
   ) => {
     try {
-      setNotification((prev) =>
-        prev.filter((notification) => notification.id !== notificationId)
-      );
+      setNotification((prev) => {
+        const updatedNotifications = prev.filter(
+          (notification) => notification.id !== notificationId
+        );
+        updateDisplayedNotifications(updatedNotifications);
+        return updatedNotifications;
+      });
       await updateFriendship(senderid, reciverid, action);
       await readNotification(notificationId);
     } catch (error) {
@@ -64,12 +74,20 @@ export default function Notification({
     }
   };
 
+  const updateDisplayedNotifications = (
+    notifications: NotificationSchema[]
+  ) => {
+    setDisplayedNotifications(notifications.slice(0, 3));
+  };
+
   useEffect(() => {
-    const filterNotifications = notifications.filter((notification) => {
-      return notification.read === false;
-    });
+    const filterNotifications = notifications.filter(
+      (notification) => notification.read === false
+    );
     setNotification(filterNotifications);
+    updateDisplayedNotifications(filterNotifications);
   }, [notifications]);
+
   return (
     <div className="relative">
       <button
@@ -98,90 +116,100 @@ export default function Notification({
               <X />
             </button>
           </div>
-          {stateNotifications.map((notification) => {
-            const sender = senders.find((s) => s.id === notification.senderId);
-            return (
-              <div
-                key={notification.id}
-                className="my-3 p-3 rounded-xl shadow border bg-white"
-              >
-                <div className="flex items-center gap-3 mb-2 bg-gray-50 rounded-lg px-2 py-1">
-                  {sender?.image ? (
-                    <Image
-                      src={sender.image}
-                      alt={sender.name || "User"}
-                      className="w-8 h-8 rounded-full object-cover border"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-purple-400 flex items-center justify-center text-white font-bold text-base">
-                      {sender?.name?.[0]?.toUpperCase() || "?"}
+          {displayedNotifications.length > 0 ? (
+            displayedNotifications.map((notification) => {
+              const sender = senders.find(
+                (s) => s.id === notification.senderId
+              );
+              return (
+                <div
+                  key={notification.id}
+                  className="my-3 p-3 rounded-xl shadow border bg-white"
+                >
+                  <div className="flex items-center gap-3 mb-2 bg-gray-50 rounded-lg px-2 py-1">
+                    {sender?.image ? (
+                      <Image
+                        src={sender.image}
+                        alt={sender.name || "User"}
+                        className="w-8 h-8 rounded-full object-cover border"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-purple-400 flex items-center justify-center text-white font-bold text-base">
+                        {sender?.name?.[0]?.toUpperCase() || "?"}
+                      </div>
+                    )}
+                    <Link
+                      href={`/profile/${sender?.id}`}
+                      className="font-semibold text-blue-700 text-base max-w-[120px] truncate overflow-hidden whitespace-nowrap"
+                      title={sender?.name || "Unknown"}
+                    >
+                      {sender?.name || "Unknown"}
+                    </Link>
+                  </div>
+                  <div className="text-gray-800 mb-3 mt-1 text-sm text-center break-words">
+                    {notification.type === "friendRequest"
+                      ? "wants to add you as a friend"
+                      : notification.message}
+                  </div>
+                  {notification.type === "friendRequest" && (
+                    <div className="flex gap-2 mb-2 justify-center">
+                      <button
+                        onClick={() =>
+                          handleFriendRequest(
+                            notification.senderId || "",
+                            notification.receiverId || "",
+                            notification.id,
+                            "accepted"
+                          )
+                        }
+                        className="flex items-center justify-center gap-1 px-3 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200 transition font-medium min-w-[90px]"
+                        title="Accept"
+                      >
+                        Accept
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleFriendRequest(
+                            notification.senderId || "",
+                            notification.receiverId || "",
+                            notification.id,
+                            "rejected"
+                          )
+                        }
+                        className="flex items-center justify-center gap-1 px-3 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200 transition font-medium min-w-[90px]"
+                        title="Decline"
+                      >
+                        Decline
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleFriendRequest(
+                            notification.senderId || "",
+                            notification.receiverId || "",
+                            notification.id,
+                            "blocked"
+                          )
+                        }
+                        className="flex items-center justify-center gap-1 px-3 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200 transition font-medium "
+                        title="Block"
+                      >
+                        <CircleOff size={18} />
+                      </button>
                     </div>
                   )}
-                  <Link
-                    href={`/profile/${sender?.id}`}
-                    className="font-semibold text-blue-700 text-base max-w-[120px] truncate overflow-hidden whitespace-nowrap"
-                    title={sender?.name || "Unknown"}
-                  >
-                    {sender?.name || "Unknown"}
-                  </Link>
-                </div>
-                <div className="text-gray-800 mb-3 mt-1 text-sm text-center break-words">
-                  {notification.type === "friendRequest"
-                    ? "wants to add you as a friend"
-                    : notification.message}
-                </div>
-                {notification.type === "friendRequest" && (
-                  <div className="flex gap-2 mb-2 justify-center">
-                    <button
-                      onClick={() =>
-                        handleFriendRequest(
-                          notification.senderId || "",
-                          notification.receiverId || "",
-                          notification.id,
-                          "accepted"
-                        )
-                      }
-                      className="flex items-center justify-center gap-1 px-3 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200 transition font-medium min-w-[90px]"
-                      title="Accept"
-                    >
-                      Accept
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleFriendRequest(
-                          notification.senderId || "",
-                          notification.receiverId || "",
-                          notification.id,
-                          "rejected"
-                        )
-                      }
-                      className="flex items-center justify-center gap-1 px-3 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200 transition font-medium min-w-[90px]"
-                      title="Decline"
-                    >
-                      Decline
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleFriendRequest(
-                          notification.senderId || "",
-                          notification.receiverId || "",
-                          notification.id,
-                          "blocked"
-                        )
-                      }
-                      className="flex items-center justify-center gap-1 px-3 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200 transition font-medium "
-                      title="Block"
-                    >
-                      <CircleOff size={18} />
-                    </button>
+                  <div className="text-xs text-gray-500 text-right">
+                    {new Date(notification.createdAt).toLocaleString()}
                   </div>
-                )}
-                <div className="text-xs text-gray-500 text-right">
-                  {new Date(notification.createdAt).toLocaleString()}
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <EmptyNotification
+              title="No New Notifications"
+              subtitle="You're all caught up! Check back later for new notifications."
+              Icon={Bell}
+            />
+          )}
         </div>
       )}
     </div>

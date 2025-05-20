@@ -7,6 +7,7 @@ import { Status } from "@prisma/client";
 import { createNotification } from "@/lib/actions/notification/createNotification";
 import Link from "next/link";
 import { updateFriendshipById } from "@/lib/actions/friendship/updateFriendship";
+
 export default function FriendList({
   users,
   currentUserId,
@@ -34,6 +35,18 @@ export default function FriendList({
         friendship?.status === "accepted" ||
         friendship?.status === "blocked"
       ) {
+        setLoadingId(null);
+        return;
+      }
+
+      const isBlocked = user?.friendsWith?.some(
+        (f) =>
+          ((f.userId === currentUserId && f.friendId === friendId) ||
+            (f.userId === friendId && f.friendId === currentUserId)) &&
+          f.status === "blocked"
+      );
+
+      if (isBlocked) {
         setLoadingId(null);
         return;
       }
@@ -68,23 +81,43 @@ export default function FriendList({
     if (friendship) {
       if (friendship.status === "accepted") return "Friend";
       if (friendship.status === "pending") return "Pending Confirmation";
-      if (friendship.status === "rejected") return "You was rejected";
+      if (friendship.status === "rejected") return "You were rejected";
+      if (friendship.status === "blocked") return "Blocked";
     }
     if (sentRequests[user.id] === "pending") return "Pending Confirmation";
     return null;
   };
 
-  const isRequestSent = (user: User) => {
+  const isButtonDisabled = (user: User) => {
     const friendship = user.friendsWith?.find(
       (f) =>
         (f.userId === currentUserId && f.friendId === user.id) ||
         (f.userId === user.id && f.friendId === currentUserId)
     );
+
+    const isBlocked = friendship?.status === "blocked";
+
     return (
+      isBlocked ||
       friendship?.status === "pending" ||
+      friendship?.status === "accepted" ||
       sentRequests[user.id] === "pending" ||
       loadingId === user.id
     );
+  };
+
+  const getButtonText = (user: User) => {
+    if (loadingId === user.id) return "Sending...";
+    const friendship = user.friendsWith?.find(
+      (f) =>
+        (f.userId === currentUserId && f.friendId === user.id) ||
+        (f.userId === user.id && f.friendId === currentUserId)
+    );
+    if (friendship?.status === "accepted") return "Already Friends";
+    if (friendship?.status === "blocked") return "Blocked";
+    if (friendship?.status === "pending" || sentRequests[user.id] === "pending")
+      return "Request Sent";
+    return "Add Friend";
   };
 
   const filteredUsers = users.filter((user) =>
@@ -94,23 +127,19 @@ export default function FriendList({
   return (
     <div className="max-w-xl mx-auto bg-white rounded-lg shadow-lg p-6">
       <label className="block mb-2 text-sm font-medium text-gray-700">
-        Пошук по ID
+        Search by ID:
       </label>
       <input
         type="text"
-        placeholder="Введіть ID користувача..."
+        placeholder="Enter user ID..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="mb-6 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
       />
       {search.trim() === "" ? (
-        <div className="text-center text-gray-500">
-          Введіть ID для пошуку користувача
-        </div>
+        <div className="text-center text-gray-500">Enter user ID to search</div>
       ) : filteredUsers.length === 0 ? (
-        <div className="text-center text-gray-500">
-          Користувачів не знайдено
-        </div>
+        <div className="text-center text-gray-500">No users found</div>
       ) : (
         filteredUsers.map((user) => (
           <div
@@ -135,13 +164,9 @@ export default function FriendList({
                   e.stopPropagation();
                   handleSendFriendRequest(user.id);
                 }}
-                disabled={isRequestSent(user)}
+                disabled={isButtonDisabled(user)}
               >
-                {loadingId === user.id
-                  ? "Sending..."
-                  : isRequestSent(user)
-                  ? "Request Sent"
-                  : "Add Friend"}
+                {getButtonText(user)}
               </Button>
 
               <div className="mt-1 text-sm text-gray-500">

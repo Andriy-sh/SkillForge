@@ -20,7 +20,6 @@ export default async function page() {
   const friends = await getFriends(user.id);
   return (
     <div className="flex flex-col max-w-[1000px] mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Friends</h1>
       <FriendsList friends={friends} userId={user.id} />
     </div>
   );

@@ -12,6 +12,8 @@ export default function FriendsList({
   userId: string;
 }) {
   const [stateFriends, setFriends] = useState<Friend[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
   useEffect(() => {
     setFriends(friends);
   }, [friends]);
@@ -19,6 +21,10 @@ export default function FriendsList({
   const handleDelete = (id: string) => {
     setFriends((prev) => prev.filter((friend) => friend.id !== id));
   };
+
+  const filteredFriends = stateFriends.filter((friend) =>
+    friend.user.name?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (stateFriends.length === 0) {
     return (
@@ -62,13 +68,46 @@ export default function FriendsList({
 
   return (
     <div className="grid gap-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-gray-800">Your Friends</h2>
-        <Link
-          href={`/friends/search`}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 transition font-semibold"
-        >
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-bold text-gray-800">Your Friends</h2>
+          <Link
+            href={`/friends/search`}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 transition font-semibold"
+          >
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+              <circle
+                cx="11"
+                cy="11"
+                r="7"
+                stroke="currentColor"
+                strokeWidth="2"
+              />
+              <path
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                d="M20 20l-3-3"
+              />
+            </svg>
+            Search new Friends
+          </Link>
+        </div>
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search friends by name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <svg
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            width="20"
+            height="20"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
             <circle
               cx="11"
               cy="11"
@@ -83,10 +122,9 @@ export default function FriendsList({
               d="M20 20l-3-3"
             />
           </svg>
-          Search
-        </Link>
+        </div>
       </div>
-      {stateFriends.map((friend) => (
+      {filteredFriends.map((friend) => (
         <div
           key={friend.id}
           className="flex items-center gap-3 p-4 bg-white justify-between rounded-lg shadow hover:bg-gray-50 transition"
