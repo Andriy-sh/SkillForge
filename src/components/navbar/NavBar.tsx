@@ -32,7 +32,7 @@ export default async function NavBar() {
       ).filter(Boolean) as User[])
     : [];
   return (
-    <header className="flex h-[9vh] sticky top-0 justify-around items-center bg-background z-50">
+    <header className="flex h-[9vh] sticky top-0 justify-around items-center bg-background z-50 ">
       <div className="flex flex-row items-center px-4 w-full  justify-around ">
         <div className="flex space-x-4">
           <Link href={"/"} className="flex items-center">
@@ -77,6 +77,7 @@ export default async function NavBar() {
           )}
         </div>
       </div>
+      <div className="absolute w-full border-b-1 border-slate-600 bottom-0 "></div>
     </header>
   );
 }

@@ -105,7 +105,7 @@ export default function Notification({
       {IsOpen && (
         <div
           ref={notificationRef}
-          className="absolute left-2 top-[46px] bg-white shadow-lg rounded-md p-4 w-72 notification"
+          className="absolute left-2 top-[58px] border-1 border-slate-800 bg-white shadow-lg p-4 w-72 notification"
         >
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-semibold">My Notifications</h2>

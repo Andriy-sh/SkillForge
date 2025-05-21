@@ -46,20 +46,26 @@ export default function NavBarProfile() {
       {IsOpen && (
         <div
           ref={profileRef}
-          className="absolute top-[46px] left-0 flex flex-col bg-white shadow-lg rounded-lg p-4 w-60 notification z-50 border border-gray-200"
+          className="absolute top-[50px] left-0 flex flex-col border-1 border-slate-800 bg-white shadow-lg  p-4 w-60 notification z-50  "
         >
           {navbarProfileConfig.map((link, index) => (
             <Link
               key={index}
               href={link.href === "/profile" ? `/profile/${userId}` : link.href}
               onClick={() => setIsOpen(false)}
-              className="py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+              className="group py-3 px-3 text-gray-700 hover:text-[#3a10e5] flex gap-2 hover:bg-gray-100 rounded-md transition-colors"
             >
+              {link.icon && (
+                <link.icon
+                  size={24}
+                  className="text-gray-600 group-hover:text-[#3a10e5]"
+                />
+              )}
               {link.label}
             </Link>
           ))}
 
-          <div className="mt-2">
+          <div className="mt-2 border-t border-t-slate-800">
             <SignOut text="Sign Out" />
           </div>
         </div>

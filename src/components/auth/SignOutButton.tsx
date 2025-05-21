@@ -14,7 +14,7 @@ export const SignOut: FC<SignOutProps> = ({
   return (
     <button
       onClick={() => signOut({ callbackUrl: "/login" })}
-      className={`${сlassName} px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors cursor-pointer`}
+      className={`${сlassName} px-4 py-2 hover:text-[#3a10e5] text-black rounded transition-colors cursor-pointer`}
     >
       {text}
     </button>

@@ -16,6 +16,16 @@ export const navbarConfig: NavbarConfig[] = [
       { label: "DevOps", href: "/courses/devops" },
       { label: "UI/UX Design", href: "/courses/ui-ux" },
       { label: "Cybersecurity", href: "/courses/cybersecurity" },
+      { label: "Cloud Computing", href: "/courses/cloud-computing" },
+      { label: "Artificial Intelligence", href: "/courses/ai" },
+      { label: "Machine Learning", href: "/courses/machine-learning" },
+      { label: "Blockchain", href: "/courses/blockchain" },
+      { label: "Game Development", href: "/courses/game-dev" },
+      { label: "Network Security", href: "/courses/network-security" },
+      { label: "Software Testing", href: "/courses/testing" },
+      { label: "Project Management", href: "/courses/project-management" },
+      { label: "System Architecture", href: "/courses/system-architecture" },
+
     ],
   },
   {
@@ -55,5 +65,4 @@ export const navbarConfig: NavbarConfig[] = [
       { label: "Settings", href: "/dashboard/settings" },
     ],
   },
-
 ];
