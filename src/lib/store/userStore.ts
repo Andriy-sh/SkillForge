@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import { User } from "@/schemas/User/User";
+import { GlobalUser } from "@/schemas/User/User";
 
 type UserStore = {
-  user: User | null;
-  setUser: (user: User) => void;
+  user: GlobalUser | null;
+  setUser: (user: GlobalUser) => void;
   updateUserId: (id: string) => void;
   updateUserEmail: (email: string) => void;
   updateUserName: (name: string) => void;

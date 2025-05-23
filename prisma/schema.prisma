@@ -7,6 +7,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 model User {
   id            String          @id @default(cuid())
   name          String?
@@ -16,6 +21,7 @@ model User {
   city          String?
   emailVerified DateTime?
   image         String?
+  role          Role            @default(USER)
   accounts      Account[]
   sessions      Session[]
   // Optional for WebAuthn support
@@ -67,7 +73,6 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-// Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
   userId               String
@@ -84,11 +89,11 @@ model Authenticator {
 }
 
 enum Status {
-  pending
-  accepted
-  rejected
-  blocked
-  unblocked
+  PENDING
+  ACCEPTED
+  REJECTED
+  BLOCKED
+  UNBLOCKED
 }
 
 model Friendship {
@@ -105,11 +110,11 @@ model Friendship {
 }
 
 enum NotificationType {
-  friendRequest
-  friendRequestAccepted
-  friendRequestRejected
-  friendRequestBlocked
-  friendRequestUnblocked
+  FRIEND_REQUEST
+  FRIEND_REQUEST_ACCEPTED
+  FRIEND_REQUEST_REJECTED
+  FRIEND_REQUEST_BLOCKED
+  FRIEND_REQUEST_UNBLOCKED
 }
 
 model Notification {
@@ -123,4 +128,55 @@ model Notification {
   updatedAt  DateTime         @updatedAt
 
   user User? @relation(fields: [receiverId], references: [id], onDelete: Cascade)
+}
+
+/// Courses
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model Course {
+  id           String       @id @default(cuid())
+  name         String       @unique
+  description  String
+  image        String?
+  price        Int?
+  level        CourseLevel?
+  duration     Int?
+  instructorId String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  resources CourseResource[]
+}
+
+enum ResourceType {
+  LANGUAGE
+  TOOL
+  FRAMEWORK
+  CONCEPT
+}
+
+model Resource {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  type        ResourceType
+  description String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  courses CourseResource[]
+}
+
+model CourseResource {
+  courseId   String
+  resourceId String
+
+  course   Course   @relation(fields: [courseId], references: [id])
+  resource Resource @relation(fields: [resourceId], references: [id])
+
+  @@id([courseId, resourceId])
 }

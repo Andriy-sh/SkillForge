@@ -57,7 +57,7 @@ export default function Notification({
     senderid: string,
     reciverid: string,
     notificationId: string,
-    action: "accepted" | "rejected" | "blocked"
+    action: "ACCEPTED" | "REJECTED" | "BLOCKED"
   ) => {
     try {
       setNotification((prev) => {
@@ -132,6 +132,8 @@ export default function Notification({
                         src={sender.image}
                         alt={sender.name || "User"}
                         className="w-8 h-8 rounded-full object-cover border"
+                        width={32}
+                        height={32}
                       />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-purple-400 flex items-center justify-center text-white font-bold text-base">
@@ -147,11 +149,11 @@ export default function Notification({
                     </Link>
                   </div>
                   <div className="text-gray-800 mb-3 mt-1 text-sm text-center break-words">
-                    {notification.type === "friendRequest"
+                    {notification.type === "FRIEND_REQUEST"
                       ? "wants to add you as a friend"
                       : notification.message}
                   </div>
-                  {notification.type === "friendRequest" && (
+                  {notification.type === "FRIEND_REQUEST" && (
                     <div className="flex gap-2 mb-2 justify-center">
                       <button
                         onClick={() =>
@@ -159,7 +161,7 @@ export default function Notification({
                             notification.senderId || "",
                             notification.receiverId || "",
                             notification.id,
-                            "accepted"
+                            "ACCEPTED"
                           )
                         }
                         className="flex items-center justify-center gap-1 px-3 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200 transition font-medium min-w-[90px]"
@@ -173,7 +175,7 @@ export default function Notification({
                             notification.senderId || "",
                             notification.receiverId || "",
                             notification.id,
-                            "rejected"
+                            "REJECTED"
                           )
                         }
                         className="flex items-center justify-center gap-1 px-3 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200 transition font-medium min-w-[90px]"
@@ -187,7 +189,7 @@ export default function Notification({
                             notification.senderId || "",
                             notification.receiverId || "",
                             notification.id,
-                            "blocked"
+                            "BLOCKED"
                           )
                         }
                         className="flex items-center justify-center gap-1 px-3 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200 transition font-medium "

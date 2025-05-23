@@ -7,7 +7,7 @@ export const createFriendship = async (userId: string, friendId: string) => {
     data: {
       userId,
       friendId,
-      status: "pending",
+      status: "PENDING",
     },
   });
 };

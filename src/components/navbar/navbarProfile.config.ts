@@ -1,4 +1,4 @@
-import { Settings, UserIcon, Users } from "lucide-react";
+import { Settings, Shield, UserIcon, Users } from "lucide-react";
 
 export const navbarProfileConfig = [
   {
@@ -15,5 +15,10 @@ export const navbarProfileConfig = [
     label: "Settings",
     href: "/settings",
     icon: Settings,
+  },
+  {
+    label: "Admin",
+    href: "/admin",
+    icon: Shield,
   },
 ];

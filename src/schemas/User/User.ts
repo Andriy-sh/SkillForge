@@ -1,4 +1,4 @@
-import { Status } from "@prisma/client";
+import { Role, Status } from "@prisma/client";
 
 export interface User {
   id: string;
@@ -11,6 +11,7 @@ export interface User {
   image: string | null;
   createdAt: Date;
   updatedAt: Date;
+  role: Role;
   friendships?: {
     id: string;
     userId: string;
@@ -28,3 +29,12 @@ export interface User {
     updatedAt: Date;
   }[];
 }
+
+export type GlobalUser = {
+  id: string;
+  name: string | null;
+  email: string;
+  bio: string | null;
+  city: string | null;
+  role: Role;
+};

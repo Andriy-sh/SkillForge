@@ -31,7 +31,7 @@ export default async function page() {
     },
   });
 
-  const allowedStatuses = ["pending", "accepted", "rejected"] as const;
+  const allowedStatuses = ["PENDING", "ACCEPTED", "REJECTED"] as const;
   const users = usersRaw
     .filter((u) => u.id !== user.id)
     .map((u) => ({

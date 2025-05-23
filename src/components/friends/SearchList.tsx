@@ -32,8 +32,8 @@ export default function FriendList({
       );
 
       if (
-        friendship?.status === "accepted" ||
-        friendship?.status === "blocked"
+        friendship?.status === "ACCEPTED" ||
+        friendship?.status === "BLOCKED"
       ) {
         setLoadingId(null);
         return;
@@ -43,7 +43,7 @@ export default function FriendList({
         (f) =>
           ((f.userId === currentUserId && f.friendId === friendId) ||
             (f.userId === friendId && f.friendId === currentUserId)) &&
-          f.status === "blocked"
+          f.status === "BLOCKED"
       );
 
       if (isBlocked) {
@@ -51,19 +51,19 @@ export default function FriendList({
         return;
       }
 
-      if (friendship && friendship.status === "rejected") {
-        await updateFriendshipById(friendship.id, "pending");
+      if (friendship && friendship.status === "REJECTED") {
+        await updateFriendshipById(friendship.id, "PENDING");
       } else {
         await createFriendship(currentUserId, friendId);
       }
 
       await createNotification({
         receiverId: friendId,
-        type: "friendRequest",
+        type: "FRIEND_REQUEST",
         message: "sent a friend request",
         senderId: currentUserId,
       });
-      setSentRequests((prev) => ({ ...prev, [friendId]: "pending" }));
+      setSentRequests((prev) => ({ ...prev, [friendId]: "PENDING" }));
     } catch (error) {
       console.error("Error sending friend request:", error);
     } finally {
@@ -79,12 +79,12 @@ export default function FriendList({
         (f.userId === user.id && f.friendId === currentUserId)
     );
     if (friendship) {
-      if (friendship.status === "accepted") return "Friend";
-      if (friendship.status === "pending") return "Pending Confirmation";
-      if (friendship.status === "rejected") return "You were rejected";
-      if (friendship.status === "blocked") return "Blocked";
+      if (friendship.status === "ACCEPTED") return "Friend";
+      if (friendship.status === "PENDING") return "Pending Confirmation";
+      if (friendship.status === "REJECTED") return "You were rejected";
+      if (friendship.status === "BLOCKED") return "Blocked";
     }
-    if (sentRequests[user.id] === "pending") return "Pending Confirmation";
+    if (sentRequests[user.id] === "PENDING") return "Pending Confirmation";
     return null;
   };
 
@@ -95,13 +95,13 @@ export default function FriendList({
         (f.userId === user.id && f.friendId === currentUserId)
     );
 
-    const isBlocked = friendship?.status === "blocked";
+    const isBlocked = friendship?.status === "BLOCKED";
 
     return (
       isBlocked ||
-      friendship?.status === "pending" ||
-      friendship?.status === "accepted" ||
-      sentRequests[user.id] === "pending" ||
+      friendship?.status === "PENDING" ||
+      friendship?.status === "ACCEPTED" ||
+      sentRequests[user.id] === "PENDING" ||
       loadingId === user.id
     );
   };
@@ -113,9 +113,9 @@ export default function FriendList({
         (f.userId === currentUserId && f.friendId === user.id) ||
         (f.userId === user.id && f.friendId === currentUserId)
     );
-    if (friendship?.status === "accepted") return "Already Friends";
-    if (friendship?.status === "blocked") return "Blocked";
-    if (friendship?.status === "pending" || sentRequests[user.id] === "pending")
+    if (friendship?.status === "ACCEPTED") return "Already Friends";
+    if (friendship?.status === "BLOCKED") return "Blocked";
+    if (friendship?.status === "PENDING" || sentRequests[user.id] === "PENDING")
       return "Request Sent";
     return "Add Friend";
   };
