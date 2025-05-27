@@ -13,6 +13,7 @@ export const getResourcesNames = async () => {
   const resourses = await prisma.resource.findMany({
     select: {
       name: true,
+      type: true,
     },
   });
   await redis.set("resourses_name", JSON.stringify(resourses));

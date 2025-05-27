@@ -161,6 +161,7 @@ model Course {
   status       CourseStatus
   type         CourseType?
   level        CourseLevel?
+  optimal      Boolean?     @unique
   duration     Int?
   instructorId String?
   createdAt    DateTime     @default(now())

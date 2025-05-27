@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { CourseType } from "@prisma/client";
 export default function SideBarCourses({
-  coursesNames,
+  resoursesNames,
 }: {
-  coursesNames: { name: string; type: CourseType }[];
+  resoursesNames: { name: string; type: CourseType }[];
 }) {
   const [isCoursesExpanded, setIsCoursesExpanded] = useState(true);
 
@@ -41,13 +41,13 @@ export default function SideBarCourses({
 
           {isCoursesExpanded && (
             <div className="mt-2 space-y-1">
-              {coursesNames.map((course, index) => (
+              {resoursesNames.map((resourse, index) => (
                 <Link
                   key={index}
-                  href={`/courses/${course.type.toLowerCase()}/${course.name}`}
+                  href={`/courses/${resourse.type}/${resourse.name}`}
                   className="flex items-center py-2 px-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg transition-colors"
                 >
-                  <span>{course.name}</span>
+                  <span>{resourse.name}</span>
                 </Link>
               ))}
             </div>

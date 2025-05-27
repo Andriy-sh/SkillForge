@@ -16,7 +16,6 @@ export const upsertCourseWithResources = async (data: FormData) => {
   const price = Number(data.get("price")) || null;
 
   const resourceIds = data.getAll("resources") as string[];
-
   const course = await prisma.course.upsert({
     where: { name },
     update: {
@@ -54,8 +53,23 @@ export const upsertCourseWithResources = async (data: FormData) => {
     })),
     skipDuplicates: true,
   });
+  const resourceTypes = await prisma.resource.findMany({
+    where: {
+      id: {
+        in: resourceIds,
+      },
+    },
+    select: {
+      name: true,
+    },
+  });
+
+  const uniqueTypes = [...new Set(resourceTypes.map((r) => r.name))];
+  const redisKeysToDelete = uniqueTypes.map((type) => `courses:${type}`);
 
   await redis.del("courses");
   await redis.del("courses_names");
+  await redis.del(...redisKeysToDelete);
+
   return course;
 };
