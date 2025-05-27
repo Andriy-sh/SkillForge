@@ -1,12 +1,15 @@
 "use server";
 
-import { CourseLevel } from "@prisma/client";
+import { CourseLevel, CourseType, CourseStatus } from "@prisma/client";
 import { prisma } from "../../../../prisma";
+import redis from "@/lib/redis";
 
 export const upsertCourseWithResources = async (data: FormData) => {
   const name = data.get("name") as string;
   const description = data.get("description") as string;
   const level = data.get("level") as CourseLevel;
+  const type = data.get("type") as CourseType;
+  const status = data.get("status") as CourseStatus;
   const duration = Number(data.get("duration")) || null;
   const image = data.get("image") as string;
   const instructorId = data.get("instructorId") as string;
@@ -20,6 +23,8 @@ export const upsertCourseWithResources = async (data: FormData) => {
       name,
       level,
       duration,
+      status,
+      type,
       image,
       instructorId,
       price,
@@ -30,6 +35,8 @@ export const upsertCourseWithResources = async (data: FormData) => {
       level,
       duration,
       image,
+      status,
+      type,
       instructorId,
       price,
       description,
@@ -48,5 +55,7 @@ export const upsertCourseWithResources = async (data: FormData) => {
     skipDuplicates: true,
   });
 
+  await redis.del("courses");
+  await redis.del("courses_names");
   return course;
 };

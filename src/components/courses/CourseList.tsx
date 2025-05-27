@@ -18,7 +18,7 @@ export async function CourseList() {
             >
               <div className="space-y-4">
                 <span className="inline-block px-3 py-1 text-sm rounded-full bg-green-100 text-green-800">
-                  {resource.type}
+                  {course.type}
                 </span>
                 <h3 className="text-xl font-semibold">{course.name}</h3>
                 <p className="text-gray-600">{resource.description}</p>

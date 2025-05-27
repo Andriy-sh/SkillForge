@@ -138,12 +138,28 @@ enum CourseLevel {
   ADVANCED
 }
 
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  PRIVATE
+}
+
+enum CourseType {
+  LANGUAGE
+  TOOL
+  FRAMEWORK
+  CONCEPT
+}
+
 model Course {
   id           String       @id @default(cuid())
   name         String       @unique
   description  String
   image        String?
   price        Int?
+  status       CourseStatus
+  type         CourseType?
   level        CourseLevel?
   duration     Int?
   instructorId String?

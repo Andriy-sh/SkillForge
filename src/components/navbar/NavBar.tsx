@@ -13,9 +13,8 @@ import { User } from "@/schemas/User/User";
 
 export default async function NavBar() {
   const session = await auth();
-
   const email = session?.user?.email;
-
+  
   const user = email ? await getUserByEmail(email) : null;
   const filteredNavbarConfig = session
     ? navbarConfig.filter(

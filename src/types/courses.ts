@@ -1,4 +1,4 @@
-import { CourseLevel } from "@prisma/client";
+import { CourseLevel, CourseType, CourseStatus } from "@prisma/client";
 import { ResourceInterface } from "./resourses";
 
 export interface CourseInterface {
@@ -6,6 +6,8 @@ export interface CourseInterface {
   name: string;
   description: string;
   level: CourseLevel | null;
+  type: CourseType | null;
+  status: CourseStatus;
   duration: number | null;
   image: string | null;
   instructorId: string | null;

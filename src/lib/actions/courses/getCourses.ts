@@ -1,26 +1,71 @@
 "use server";
 
+import redis from "@/lib/redis";
 import { prisma } from "../../../../prisma";
 
-export const getCourses = async () => {
+export const getCoursesNames = async () => {
+  const cachedCourses = await redis.get("courses_names");
+
+  if (cachedCourses) {
+    return JSON.parse(cachedCourses);
+  }
+
   const courses = await prisma.course.findMany({
-    include: {
-      resources: {
-        include: {
-          resource: true,
-        },
-      },
+    select: {
+      name: true,
+      type: true,
     },
   });
+  await redis.set("courses_names", JSON.stringify(courses));
   return courses;
 };
 
 export const getCoursesAll = async () => {
-  const courses = await prisma.courseResource.findMany({
-    include: {
-      resource: true,
-      course: true,
-    },
-  });
-  return courses;
+  try {
+    const cachedCourses = await redis.get("courses");
+
+    if (cachedCourses) {
+      return JSON.parse(cachedCourses);
+    }
+
+    const courses = await prisma.courseResource.findMany({
+      include: {
+        resource: true,
+        course: true,
+      },
+    });
+
+    await redis.set("courses", JSON.stringify(courses));
+    return courses;
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    return [];
+  }
+};
+
+export const getCourseByName = async (name: string) => {
+  try {
+    const cachedCourse = await redis.get(`course:${name}`);
+
+    if (cachedCourse) {
+      return JSON.parse(cachedCourse);
+    }
+
+    const course = await prisma.courseResource.findMany({
+      where: {
+        course: {
+          name: name,
+        },
+      },
+      include: {
+        resource: true,
+        course: true,
+      },
+    });
+    await redis.set(`course:${name}`, JSON.stringify(course));
+    return course;
+  } catch (error) {
+    console.error("Error fetching course:", error);
+    return [];
+  }
 };

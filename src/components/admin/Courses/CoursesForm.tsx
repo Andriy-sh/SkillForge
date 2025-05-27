@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { upsertCourseWithResources } from "@/lib/actions/courses/upsertCourses";
 import { ResourceInterface } from "@/types/resourses";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CourseLevel } from "@prisma/client";
+import { CourseLevel, CourseStatus, CourseType } from "@prisma/client";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -29,6 +29,8 @@ const courseSchema = z.object({
   description: z.string().min(1, "Description is required"),
   level: z.nativeEnum(CourseLevel),
   duration: z.number().min(1, "Duration is required"),
+  type: z.nativeEnum(CourseType),
+  status: z.nativeEnum(CourseStatus),
   image: z.string().min(0, "Image URL is required"),
   instructorId: z.string().min(0, "Instructor is required"),
   price: z.number().min(0, "Price must be positive"),
@@ -49,6 +51,8 @@ export default function CourseForm({
       description: "",
       level: "BEGINNER",
       duration: 0,
+      type: "CONCEPT",
+      status: "ARCHIVED",
       image: "",
       instructorId: "",
       price: 0,
@@ -62,6 +66,8 @@ export default function CourseForm({
       formData.append("name", data.name);
       formData.append("description", data.description);
       formData.append("level", data.level);
+      formData.append("type", data.type);
+      formData.append("status", data.status);
       formData.append("duration", data.duration.toString());
       formData.append("image", data.image);
       formData.append("instructorId", data.instructorId);
@@ -124,6 +130,52 @@ export default function CourseForm({
                       {Object.values(CourseLevel).map((level) => (
                         <SelectItem key={level} value={level}>
                           {level}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Type</FormLabel>
+                <FormControl>
+                  <Select {...field} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(CourseType).map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <FormControl>
+                  <Select {...field} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(CourseStatus).map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status}
                         </SelectItem>
                       ))}
                     </SelectContent>
