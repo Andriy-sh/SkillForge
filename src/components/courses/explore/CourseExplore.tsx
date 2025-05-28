@@ -18,7 +18,7 @@ export default async function CourseExplore({ name }: Props) {
           level={course.course.level}
           title={course.course.name}
           description={course.course.description}
-          href={`/learn/paths/${course.course.id}`}
+          href={`/learn/${course.course.name.replace(/\s/g, "-")}`}
           durationHours={course.course.duration}
           category={course.course.category}
         />
