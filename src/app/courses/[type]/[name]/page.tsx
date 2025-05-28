@@ -5,5 +5,5 @@ type Props = { type: string; name: string };
 
 export default function page({ params }: { params: Props }) {
   const decodedName = decodeURIComponent(params.name);
-  return <CourseTemplate name={decodedName} type={params.type} />;
+  return <CourseTemplate name={decodedName} />;
 }

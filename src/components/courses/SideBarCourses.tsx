@@ -44,7 +44,9 @@ export default function SideBarCourses({
               {resoursesNames.map((resourse, index) => (
                 <Link
                   key={index}
-                  href={`/courses/${resourse.type}/${resourse.name}`}
+                  href={`/courses/${resourse.type.toLowerCase()}/${
+                    resourse.name
+                  }`}
                   className="flex items-center py-2 px-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg transition-colors"
                 >
                   <span>{resourse.name}</span>

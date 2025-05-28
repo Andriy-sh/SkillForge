@@ -19,3 +19,12 @@ export const getResourcesNames = async () => {
   await redis.set("resourses_name", JSON.stringify(resourses));
   return resourses;
 };
+
+export const getResourseByName = async (name: string) => {
+  const resourse = await prisma.resource.findUnique({
+    where: {
+      name,
+    },
+  });
+  return resourse;
+};

@@ -8,6 +8,7 @@ export interface CourseInterface {
   level: CourseLevel | null;
   type: CourseType | null;
   status: CourseStatus;
+  optimal: boolean | null;
   duration: number | null;
   image: string | null;
   instructorId: string | null;

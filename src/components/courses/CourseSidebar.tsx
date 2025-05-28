@@ -3,7 +3,7 @@ import React from "react";
 
 const CourseSidebar = () => {
   return (
-    <div className="w-64 space-y-4">
+    <div className="w-64 space-y-4 p-8">
       <div>
         <h3 className="text-sm font-semibold text-gray-700 mb-2">
           Related topics
