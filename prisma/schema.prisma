@@ -152,20 +152,29 @@ enum CourseType {
   CONCEPT
 }
 
+enum CourseCategory {
+  FREE
+  SKILL_PATH
+  CAREER_PATH
+}
+
 model Course {
-  id           String       @id @default(cuid())
-  name         String       @unique
-  description  String
-  image        String?
-  price        Int?
-  status       CourseStatus
-  type         CourseType?
-  level        CourseLevel?
-  optimal      Boolean?     
+  id          String       @id @default(cuid())
+  name        String       @unique
+  description String
+  image       String?
+  price       Int?
+  status      CourseStatus
+  type        CourseType?
+  level       CourseLevel?
+
+  category CourseCategory? @default(FREE)
+
+  optimal      Boolean?
   duration     Int?
   instructorId String?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   resources CourseResource[]
 }

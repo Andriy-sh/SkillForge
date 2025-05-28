@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { CourseType } from "@prisma/client";
-export default function SideBarCourses({
+export default function SidebarCourses({
   resoursesNames,
 }: {
   resoursesNames: { name: string; type: CourseType }[];

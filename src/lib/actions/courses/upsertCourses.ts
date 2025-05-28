@@ -65,7 +65,10 @@ export const upsertCourseWithResources = async (data: FormData) => {
   });
 
   const uniqueTypes = [...new Set(resourceTypes.map((r) => r.name))];
-  const redisKeysToDelete = uniqueTypes.map((type) => `courses:${type}`);
+  const redisKeysToDelete = uniqueTypes.flatMap((type) => [
+    `coursescourseswithresource:${type}`,
+    `courses:${type}`,
+  ]);
 
   await redis.del("courses");
   await redis.del("courses_names");
