@@ -179,6 +179,7 @@ model Course {
 
   resources  CourseResource[]
   Enrollment Enrollment[]
+  Module     Module[]
 }
 
 enum ResourceType {
@@ -221,4 +222,40 @@ model Enrollment {
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@id([userId, courseId])
+}
+
+enum ContentType {
+  LESSON
+  ARTICLE
+  PROJECT
+  QUIZ
+  EXERCISE
+}
+
+model Module {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  order       Int
+  courseId    String
+  units       Unit[]
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model Unit {
+  id        String      @id @default(cuid())
+  title     String
+  type      ContentType
+  order     Int
+  moduleId  String
+  body      String?
+  videoUrl  String?
+  assetUrl  String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([moduleId, order])
 }

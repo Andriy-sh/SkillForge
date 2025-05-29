@@ -14,3 +14,16 @@ export const getEnrollments = async (userId: string) => {
 
   return enrollments;
 };
+
+export const getEnrollment = async (userId: string, courseId: string) => {
+  const enrollment = await prisma.enrollment.findUnique({
+    where: {
+      userId_courseId: {
+        userId,
+        courseId,
+      },
+    },
+  });
+
+  return enrollment;
+};

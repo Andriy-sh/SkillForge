@@ -1,8 +1,8 @@
 import { getUserById } from "@/lib/actions/user/getUser";
-import Profile from "@/components/profile/Profile";
+import Profile from "@/components/profile/section/Profile";
 import React from "react";
 import { redirect } from "next/navigation";
-import Services from "@/components/profile/Services";
+import Services from "@/components/profile/section/services/Services";
 import { auth } from "../../../../auth";
 
 type Params = Promise<{ userId: string }>;
@@ -19,7 +19,7 @@ export default async function page({ params }: { params: Params }) {
       {user && (
         <div className="grid grid-cols-[1fr_4fr] gap-10 p-8">
           <Profile user={user} session={session} />
-          <Services />
+          <Services userId={userId} />
         </div>
       )}
     </div>

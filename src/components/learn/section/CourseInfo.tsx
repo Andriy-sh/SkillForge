@@ -11,10 +11,16 @@ import {
 } from "lucide-react";
 import React from "react";
 import Certificate from "./Certificate";
+import EnrollButton from "../button/EnrollButton";
+import { auth } from "../../../../auth";
+import { getEnrollment } from "@/lib/actions/enrollment/getEnrollments";
 
 export default async function CourseInfo({ name }: { name: string }) {
   const namee = name?.replaceAll("-", " ") || name;
   const course: CourseWithResourceInterface[] = await getCourseByName(namee);
+  const session = await auth();
+
+  const enrollment = await getEnrollment(session?.user.id, course[0].course.id);
   return (
     <div>
       {course.map((course) => (
@@ -66,9 +72,14 @@ export default async function CourseInfo({ name }: { name: string }) {
                   </p>
                   <div>Ratting</div>
                   <div className="grid grid-cols-2 space-x-4">
-                    <button className="bg-[#5533ff] text-white p-3 rounded-sm">
-                      Start
-                    </button>
+                    {enrollment ? (
+                      <div className="bg-[#1e125b] text-center text-white p-3 rounded-sm cursor-not-allowed">
+                        You are already enrolled
+                      </div>
+                    ) : (
+                      <EnrollButton courseId={course.course.id} />
+                    )}
+
                     <p className="p-3 text-center font-semibold">
                       1 870 301 learners enrolled
                     </p>
