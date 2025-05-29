@@ -10,7 +10,6 @@ import {
   StarIcon,
 } from "lucide-react";
 import React from "react";
-import Certificate from "./Certificate";
 import EnrollButton from "../button/EnrollButton";
 import { auth } from "../../../../auth";
 import { getEnrollment } from "@/lib/actions/enrollment/getEnrollments";
@@ -19,7 +18,14 @@ export default async function CourseInfo({ name }: { name: string }) {
   const namee = name?.replaceAll("-", " ") || name;
   const course: CourseWithResourceInterface[] = await getCourseByName(namee);
   const session = await auth();
-
+  console.log(course);
+  const totalUnits = course.reduce((acc, course) => {
+    return (
+      acc +
+      (course.course.module?.reduce((sum, mod) => sum + mod._count.units, 0) ??
+        0)
+    );
+  }, 0);
   const enrollment = await getEnrollment(session?.user.id, course[0].course.id);
   return (
     <div>
@@ -136,7 +142,7 @@ export default async function CourseInfo({ name }: { name: string }) {
                 <Puzzle className="w-10 h-10 text-global" />
                 <div>
                   <p>Lessons</p>
-                  <span className="font-bold">14</span>
+                  <span className="font-bold">{totalUnits}</span>
                 </div>
               </div>
               <div className="flex space-x-3 justify-center items-center text-lg">
@@ -150,7 +156,6 @@ export default async function CourseInfo({ name }: { name: string }) {
           </div>
         </div>
       ))}
-      <Certificate />
     </div>
   );
 }

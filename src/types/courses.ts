@@ -5,6 +5,7 @@ import {
   CourseCategory,
 } from "@prisma/client";
 import { ResourceInterface } from "./resourses";
+import { ModuleInterface } from "./modules";
 
 export interface CourseInterface {
   id: string;
@@ -21,6 +22,7 @@ export interface CourseInterface {
   price: number | null;
   createdAt: Date;
   updatedAt: Date;
+  module?: ModuleInterface[] | null;
 }
 export interface CoursesInterface {
   courseId: string;

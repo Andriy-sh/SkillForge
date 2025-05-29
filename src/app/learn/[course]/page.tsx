@@ -1,3 +1,4 @@
+import Certificate from "@/components/learn/section/Certificate";
 import CourseInfo from "@/components/learn/section/CourseInfo";
 import CourseModule from "@/components/learn/section/CourseModule";
 import React from "react";
@@ -9,6 +10,7 @@ export default function page({ params }: { params: Props }) {
     <div className="flex flex-col ">
       <CourseInfo name={params.course} />
       <CourseModule name={params.course} />
+      <Certificate />
     </div>
   );
 }

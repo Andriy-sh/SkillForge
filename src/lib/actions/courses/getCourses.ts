@@ -59,7 +59,19 @@ export const getCourseByName = async (name: string) => {
       },
       include: {
         resource: true,
-        course: true,
+        course: {
+          include: {
+            module: {
+              include: {
+                _count: {
+                  select: {
+                    units: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
     await redis.set(`course:${name}`, JSON.stringify(course));
