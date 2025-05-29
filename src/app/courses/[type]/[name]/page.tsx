@@ -13,7 +13,7 @@ export default function page({ params }: { params: Props }) {
     <div className="grid grid-cols-[1fr_3fr] grid-rows-2 min-h-screen  max-w-[1300px] mx-auto pb-10">
       <CourseSidebar />
       <CourseIntroSection name={decodedName} type={params.type} />
-      <div className="col-span-2 grid grid-cols-[1fr_3fr] gap-4">
+      <div className="col-span-2 grid grid-cols-[1fr_3fr] gap-4 ">
         <CourseCountHeader name={decodedName} />
         <CourseSidebarFilter />
         <CourseFilter name={decodedName} />

@@ -32,6 +32,7 @@ model User {
   friendships  Friendship[]   @relation("UserFriendships")
   friendsWith  Friendship[]   @relation("UserFriendsWith")
   Notification Notification[]
+  Enrollment   Enrollment[]
 }
 
 model Account {
@@ -176,7 +177,8 @@ model Course {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  resources CourseResource[]
+  resources  CourseResource[]
+  Enrollment Enrollment[]
 }
 
 enum ResourceType {
@@ -205,4 +207,18 @@ model CourseResource {
   resource Resource @relation(fields: [resourceId], references: [id])
 
   @@id([courseId, resourceId])
+}
+
+model Enrollment {
+  userId      String
+  courseId    String
+  progress    Float     @default(0.0)
+  enrolledAt  DateTime  @default(now())
+  completedAt DateTime?
+  isCompleted Boolean   @default(false)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@id([userId, courseId])
 }

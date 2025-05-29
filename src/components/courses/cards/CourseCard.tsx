@@ -1,7 +1,7 @@
 import React from "react";
-import Link from "next/link";
 import { BarChart } from "lucide-react";
 import { CourseLevel, CourseCategory } from "@prisma/client";
+import Link from "next/link";
 
 interface CareerPathCardProps {
   title: string;
