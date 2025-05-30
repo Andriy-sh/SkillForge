@@ -1,5 +1,5 @@
-import { getCourseByName } from "@/lib/actions/courses/getCourses";
-import { CourseWithResourceInterface } from "@/types/courses";
+import { getFullCourseByName } from "@/lib/actions/courses/getCourses";
+import { CoursesInterface } from "@/types/courses";
 import {
   BarChart,
   Clock,
@@ -11,22 +11,36 @@ import {
 } from "lucide-react";
 import React from "react";
 import EnrollButton from "../button/EnrollButton";
-import { auth } from "../../../../auth";
-import { getEnrollment } from "@/lib/actions/enrollment/getEnrollments";
+import { ModuleInterface } from "@/types/modules";
+import { slugify } from "@/lib/utils/strings";
 
 export default async function CourseInfo({ name }: { name: string }) {
   const namee = name?.replaceAll("-", " ") || name;
-  const course: CourseWithResourceInterface[] = await getCourseByName(namee);
-  const session = await auth();
+  const course: CoursesInterface[] = await getFullCourseByName(namee);
   console.log(course);
   const totalUnits = course.reduce((acc, course) => {
     return (
       acc +
-      (course.course.module?.reduce((sum, mod) => sum + (mod._count?.units ?? 0), 0) ??
-        0)
+      (course.course.module?.reduce(
+        (sum, mod) => sum + (mod._count?.units ?? 0),
+        0
+      ) ?? 0)
     );
   }, 0);
-  const enrollment = await getEnrollment(session?.user.id, course[0].course.id);
+  const modules = course.reduce<ModuleInterface[]>((acc, courseItem) => {
+    courseItem.course.module?.forEach((module) => {
+      acc.push(module);
+    });
+    return acc;
+  }, []);
+  const nextTask = modules.find((module) => {
+    if (!module.isCompleted) {
+      return module.units.some((unit) => {
+        return !unit.isCompleted;
+      });
+    }
+    return false;
+  });
   return (
     <div>
       {course.map((course) => (
@@ -80,9 +94,17 @@ export default async function CourseInfo({ name }: { name: string }) {
                   <div className="grid grid-cols-2 space-x-4">
                     <EnrollButton
                       courseId={course.course.id}
-                      enrollment={enrollment ? true : false}
+                      enrollment={course ? true : false}
+                      clasName="w-[200px] "
+                      moduleName={
+                        nextTask?.title ? slugify(nextTask.title) : ""
+                      }
+                      unitName={
+                        nextTask?.units[0].title
+                          ? slugify(nextTask?.units[0].title)
+                          : ""
+                      }
                     />
-
                     <p className="p-3 text-center font-semibold">
                       1 870 301 learners enrolled
                     </p>

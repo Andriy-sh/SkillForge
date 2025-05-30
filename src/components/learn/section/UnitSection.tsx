@@ -37,17 +37,20 @@ export default async function UnitSection({ unitName }: Props) {
       </header>
 
       <div className="grid gap-8">
-        {unit.task?.map((task, index) => (
+        {unit.task.map((task, index) => (
           <div
             key={index}
             className="flex flex-col gap-5 p-6 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] bg-white border border-gray-200 hover:shadow-lg transition-shadow"
           >
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                {getTaskIcon(task.type)}
-                <h2 className="text-2xl font-medium text-[#1a1a1a]">
+              <div className="flex justify-center gap-4 flex-col">
+                <h2 className="text-2xl font-medium text-[#1a1a1a] flex items-center gap-4">
+                  {getTaskIcon(task.type)}
                   {task.title}
                 </h2>
+                {task.description && (
+                  <p className="text-gray-600">{task.description}</p>
+                )}
               </div>
               {task.isCompleted ? (
                 <span className="text-green-600 flex items-center gap-2 text-sm font-medium">
@@ -64,11 +67,20 @@ export default async function UnitSection({ unitName }: Props) {
               )}
             </div>
 
-            <ul className="space-y-4 text-[#333] text-base leading-relaxed">
+            <div className="space-y-4 text-[#333] text-base leading-relaxed">
               {task.paragraph?.map((p, idx) => (
-                <li key={idx}>{p.content}</li>
+                <div key={idx}>
+                  <p>{p.content}</p>
+                  {p.bulletList && p.bulletList.length > 0 && (
+                    <ul className="list-disc pl-6 mt-2">
+                      {p.bulletList.map((b) => (
+                        <li key={b.id}>{b.content}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         ))}
       </div>

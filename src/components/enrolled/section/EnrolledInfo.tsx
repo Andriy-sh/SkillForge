@@ -29,6 +29,7 @@ export default async function EnrolledInfo({ courseName }: Props) {
       courseItem.course.module?.forEach((module) => {
         module.units.forEach((u) => {
           const key = u.type.toLowerCase() as
+            | "information"
             | "lesson"
             | "article"
             | "exercise"
@@ -39,7 +40,7 @@ export default async function EnrolledInfo({ courseName }: Props) {
       });
       return acc;
     },
-    { lesson: 0, article: 0, exercise: 0, project: 0, quiz: 0 }
+    { information: 0, lesson: 0, article: 0, exercise: 0, project: 0, quiz: 0 }
   );
   const modules = course.reduce<ModuleInterface[]>((acc, courseItem) => {
     courseItem.course.module?.forEach((module) => {
@@ -55,7 +56,6 @@ export default async function EnrolledInfo({ courseName }: Props) {
     }
     return false;
   });
-  console.log(nextTask);
   return (
     <div className=" mt-10">
       {course.map((course) => (

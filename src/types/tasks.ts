@@ -1,4 +1,5 @@
-import { Paragraph, TaskType } from "@prisma/client";
+import { TaskType } from "@prisma/client";
+import { Paragraph } from "./paragraph";
 
 export interface Task {
   id: string;

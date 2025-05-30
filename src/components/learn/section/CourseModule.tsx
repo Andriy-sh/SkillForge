@@ -16,6 +16,7 @@ import {
 import React, { JSX } from "react";
 
 const unitIcons: Record<string, JSX.Element> = {
+  information: <Book className="w-6 h-6" />,
   lesson: <Book className="w-6 h-6" />,
   article: <FileText className="w-6 h-6" />,
   exercise: <ListChecks className="w-6 h-6 " />,
@@ -39,6 +40,7 @@ export default async function CourseModule({
     (acc, module) => {
       module.units.forEach((u) => {
         const key = u.type.toLowerCase() as
+          | "information"
           | "lesson"
           | "article"
           | "exercise"
@@ -48,7 +50,7 @@ export default async function CourseModule({
       });
       return acc;
     },
-    { lesson: 0, article: 0, exercise: 0, project: 0, quiz: 0 }
+    { information: 0, lesson: 0, article: 0, exercise: 0, project: 0, quiz: 0 }
   );
 
   return (
@@ -86,7 +88,13 @@ export default async function CourseModule({
                 <AccordionItem value={module.id}>
                   <AccordionTrigger className="cursor-pointer w-full">
                     <div className="flex items-start w-full gap-4">
-                      <div className="w-10 h-10 flex-none shrink-0 flex justify-center items-center bg-global rounded-full text-white font-bold">
+                      <div
+                        className={`w-10 h-10 flex-none shrink-0 flex justify-center items-center ${
+                          module.isCompleted
+                            ? "bg-green-700 text-black"
+                            : "bg-global"
+                        }  rounded-full text-white font-bold`}
+                      >
                         {module.order}
                       </div>
 
@@ -95,7 +103,21 @@ export default async function CourseModule({
                           <h2 className="text-xl font-semibold">
                             {module.title}
                           </h2>
-                          <p className="text-gray-600">{module.description}</p>
+                          <p>
+                            {Object.entries(
+                              module.units.reduce((acc, unit) => {
+                                const type = unit.type.toLowerCase();
+                                acc[type] = (acc[type] || 0) + 1;
+                                return acc;
+                              }, {} as Record<string, number>)
+                            ).map(([type, count], index, array) => (
+                              <span key={type}>
+                                {count}{" "}
+                                {type.charAt(0).toUpperCase() + type.slice(1)}
+                                {index < array.length - 1 ? ", " : ""}
+                              </span>
+                            ))}
+                          </p>
                         </div>
                         <ChevronDown className="w-6 h-6 ml-4 shrink-0" />
                       </div>
@@ -103,6 +125,10 @@ export default async function CourseModule({
                   </AccordionTrigger>
 
                   <AccordionContent>
+                    <p className="text-gray-600 px-4 py-1">
+                      {module.description}
+                    </p>
+
                     {module.units.map((u) => (
                       <div
                         key={u.id}
