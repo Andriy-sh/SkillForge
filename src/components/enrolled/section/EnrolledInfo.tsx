@@ -1,6 +1,8 @@
 import EnrollButton from "@/components/learn/button/EnrollButton";
 import { getFullCourseByName } from "@/lib/actions/courses/getCourses";
+import { slugify } from "@/lib/utils/strings";
 import { CoursesInterface } from "@/types/courses";
+import { ModuleInterface } from "@/types/modules";
 import {
   Book,
   FileText,
@@ -39,8 +41,21 @@ export default async function EnrolledInfo({ courseName }: Props) {
     },
     { lesson: 0, article: 0, exercise: 0, project: 0, quiz: 0 }
   );
-
-  console.log(course);
+  const modules = course.reduce<ModuleInterface[]>((acc, courseItem) => {
+    courseItem.course.module?.forEach((module) => {
+      acc.push(module);
+    });
+    return acc;
+  }, []);
+  const nextTask = modules.find((module) => {
+    if (!module.isCompleted) {
+      return module.units.some((unit) => {
+        return !unit.isCompleted;
+      });
+    }
+    return false;
+  });
+  console.log(nextTask);
   return (
     <div className=" mt-10">
       {course.map((course) => (
@@ -52,6 +67,12 @@ export default async function EnrolledInfo({ courseName }: Props) {
                 courseId={course.course.id}
                 enrollment={course ? true : false}
                 clasName="w-[200px] "
+                moduleName={nextTask?.title ? slugify(nextTask.title) : ""}
+                unitName={
+                  nextTask?.units[0].title
+                    ? slugify(nextTask?.units[0].title)
+                    : ""
+                }
               />
               <span className="text-ellipsis">{course.course.description}</span>
               <p className="text-2xl font-semibold">Course Progress </p>

@@ -189,6 +189,9 @@ export const getFullCourseByName = async (name: string) => {
       course: {
         include: {
           module: {
+            orderBy: {
+              order: "asc",
+            },
             include: {
               units: true,
             },
@@ -203,4 +206,3 @@ export const getFullCourseByName = async (name: string) => {
 
   return course;
 };
-

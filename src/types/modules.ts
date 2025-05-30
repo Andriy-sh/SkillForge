@@ -7,6 +7,7 @@ export interface ModuleInterface {
   order: number;
   courseId: string;
   units: Unit[];
+  isCompleted: boolean;
   _count?: {
     units?: number;
   };

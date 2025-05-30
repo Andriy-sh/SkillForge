@@ -233,29 +233,70 @@ enum ContentType {
 }
 
 model Module {
-  id          String @id @default(cuid())
+  id          String  @id @default(cuid())
   title       String
   description String
   order       Int
   courseId    String
+  isCompleted Boolean @default(false)
   units       Unit[]
 
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 model Unit {
-  id        String      @id @default(cuid())
-  title     String
-  type      ContentType
-  order     Int
-  moduleId  String
-  body      String?
-  videoUrl  String?
-  assetUrl  String?
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id          String      @id @default(cuid())
+  title       String
+  type        ContentType
+  order       Int
+  moduleId    String
+  description String?
+  body        String?
+  videoUrl    String?
+  assetUrl    String?
+  isCompleted Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   module Module? @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  task   Task[]
 
   @@unique([moduleId, order])
+}
+
+enum TaskType {
+  READ
+  WRITE_CODE
+  UPLOAD
+  VIDEO
+  QUIZ
+  PROJECT
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  unitId      String
+  type        TaskType
+  title       String
+  description String?
+  order       Int
+  points      Int?
+  isCompleted Boolean  @default(false)
+  isOptional  Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  unit      Unit        @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  paragraph Paragraph[]
+
+  @@unique([unitId, order])
+}
+
+model Paragraph {
+  id      String @id @default(cuid())
+  content String
+  order   Int
+  taskId  String
+  task    Task?  @relation(fields: [taskId], references: [id], onDelete: Cascade)
 }

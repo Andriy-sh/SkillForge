@@ -9,10 +9,14 @@ export default function EnrollButton({
   courseId,
   enrollment,
   clasName,
+  moduleName,
+  unitName,
 }: {
   courseId: string;
   enrollment: boolean;
   clasName?: string;
+  moduleName?: string;
+  unitName?: string;
 }) {
   const userId = useUserStore((state) => state.user?.id);
   const router = useRouter();
@@ -31,7 +35,7 @@ export default function EnrollButton({
     <>
       {enrollment ? (
         <Link
-          href={`learn/?`}
+          href={`/learn/module/${moduleName}/unit/${unitName}`}
           className={`${clasName} bg-[#5533ff]  text-center text-white p-3 rounded-sm `}
         >
           Resume course
