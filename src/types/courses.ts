@@ -35,3 +35,10 @@ export interface CourseWithResourceInterface {
   resource: ResourceInterface;
   course: CourseInterface;
 }
+
+export interface FullCourse {
+  courseId: string;
+  resourceId: string;
+  resource: ResourceInterface;
+  course: CourseInterface;
+}

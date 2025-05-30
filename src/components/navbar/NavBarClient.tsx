@@ -1,40 +1,42 @@
-import Link from "next/link";
-import { navbarConfig } from "./navbar.config";
+"use client";
 
-import NavItemWithDropdown from "./NavItemWithDropdown";
+import Link from "next/link";
 import Image from "next/image";
+import NavItemWithDropdown from "./NavItemWithDropdown";
 import Notification from "./Notification";
 import NavBarProfile from "./NavBarProfile";
-import { auth } from "../../../auth";
+import { navbarConfig } from "./navbar.config";
 import { navbarAuthConfig } from "./navbarAuth.config";
-import { getUserByEmail, getUserById } from "@/lib/actions/user/getUser";
-import { getNotification } from "@/lib/actions/notification/getNotification";
 import { User } from "@/schemas/User/User";
+import { Session } from "next-auth";
+import { NotificationSchema } from "@/schemas/notification/notification";
+import { usePathname } from "next/navigation";
 
-export default async function NavBar({ clasName }: { clasName: string }) {
-  const session = await auth();
-  const email = session?.user?.email;
-
-  const user = email ? await getUserByEmail(email) : null;
+export default function NavBarClient({
+  session,
+  user,
+  notifications,
+  senders,
+}: {
+  session: Session | null;
+  user: User | null;
+  notifications: NotificationSchema[];
+  senders: User[];
+}) {
   const filteredNavbarConfig = session
     ? navbarConfig.filter(
         (link) => link.href !== "/signup" && link.href !== "/login"
       )
     : navbarConfig;
-  const notifications = await getNotification(user?.id || "");
-
-  const sendersIds = notifications.map((n) => n.senderId).filter(Boolean);
-
-  const senders = sendersIds.length
-    ? ((
-        await Promise.all(sendersIds.map((id) => getUserById(id as string)))
-      ).filter(Boolean) as User[])
-    : [];
+  const pathname = usePathname();
+  const isCoursePage = pathname.startsWith("/enrolled/courses/");
   return (
     <header
-      className={`flex h-[9vh] sticky top-0 justify-around items-center bg-background ${clasName} z-50 `}
+      className={`flex h-[9vh] sticky top-0 justify-around items-center bg-background ${
+        isCoursePage ? "bg-white" : "bg-background"
+      } z-50`}
     >
-      <div className="flex flex-row items-center px-4 w-full  justify-around ">
+      <div className="flex flex-row items-center px-4 w-full justify-around">
         <div className="flex space-x-4">
           <Link href={"/"} className="flex items-center">
             <Image
@@ -46,7 +48,7 @@ export default async function NavBar({ clasName }: { clasName: string }) {
             />
           </Link>
           {filteredNavbarConfig.map((link, index) =>
-            link.dropdown === true ? (
+            link.dropdown ? (
               <NavItemWithDropdown key={index} link={link} />
             ) : (
               <Link
@@ -78,7 +80,7 @@ export default async function NavBar({ clasName }: { clasName: string }) {
           )}
         </div>
       </div>
-      <div className="absolute w-full border-b-1 border-slate-600 bottom-0 "></div>
+      <div className="absolute w-full border-b-1 border-slate-600 bottom-0"></div>
     </header>
   );
 }

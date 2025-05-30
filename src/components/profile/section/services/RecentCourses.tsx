@@ -1,6 +1,7 @@
 "use client";
 
 import { Enrollment } from "@/types/enrollmets";
+import Link from "next/link";
 
 export default function RecentCourses({
   enrollment,
@@ -11,7 +12,8 @@ export default function RecentCourses({
     <section>
       <h2 className="text-xl font-bold mb-4">Latest Courses</h2>
       {enrollment.map((item) => (
-        <div
+        <Link
+          href={`/enrolled/courses/${item.course.name.replace(/ /g, "-")}`}
           key={item.course.id}
           className="p-4 bg-white shadow-md rounded-md flex justify-between items-center"
         >
@@ -29,7 +31,7 @@ export default function RecentCourses({
             </div>
             <button className="text-blue-600 hover:underline">{">"}</button>
           </div>
-        </div>
+        </Link>
       ))}
     </section>
   );

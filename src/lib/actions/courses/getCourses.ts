@@ -172,3 +172,38 @@ export const getCoursesByResourseName = async (name: string) => {
     return [];
   }
 };
+
+export const getFullCourseByName = async (name: string) => {
+  const cachedCourse = await redis.get(`fullcourse:${name}`);
+  if (cachedCourse) {
+    return JSON.parse(cachedCourse);
+  }
+  const courseName = await prisma.course.findUnique({
+    where: {
+      name,
+    },
+  });
+  const course = await prisma.courseResource.findMany({
+    where: {
+      course: {
+        name: courseName?.name,
+      },
+    },
+    include: {
+      course: {
+        include: {
+          module: {
+            include: {
+              units: true,
+            },
+          },
+        },
+      },
+      resource: true,
+    },
+  });
+
+  await redis.set(`fullcourse:${name}`, JSON.stringify(course));
+
+  return course;
+};

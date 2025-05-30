@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import NavBar from "@/components/navbar/NavBar";
 import dynamic from "next/dynamic";
 import { auth } from "../../auth";
 import { getUserByEmail } from "@/lib/actions/user/getUser";
 import { UserProvider } from "@/components/provider/UserProvider";
+import NavBarServer from "@/components/navbar/NavBarServer";
 
 const inter = Inter({ subsets: ["latin"] });
 const LazyFooter = dynamic(() => import("@/components/footer/Footer"), {});
@@ -26,7 +26,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <UserProvider user={user}>
-          <NavBar />
+          <NavBarServer />
           <main className="bg-background min-h-[91vh]"> {children}</main>
           <LazyFooter />
         </UserProvider>

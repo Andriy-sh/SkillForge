@@ -2,9 +2,18 @@
 
 import { upsertEnrollment } from "@/lib/actions/enrollment/upsertEnrollmets";
 import { useUserStore } from "@/lib/store/userStore";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function EnrollButton({ courseId }: { courseId: string }) {
+export default function EnrollButton({
+  courseId,
+  enrollment,
+  clasName,
+}: {
+  courseId: string;
+  enrollment: boolean;
+  clasName?: string;
+}) {
   const userId = useUserStore((state) => state.user?.id);
   const router = useRouter();
   const handleSumbit = async () => {
@@ -19,11 +28,22 @@ export default function EnrollButton({ courseId }: { courseId: string }) {
     }
   };
   return (
-    <button
-      onClick={handleSumbit}
-      className="bg-[#5533ff] text-white p-3 rounded-sm cursor-pointer"
-    >
-      Start
-    </button>
+    <>
+      {enrollment ? (
+        <Link
+          href={`learn/?`}
+          className={`${clasName} bg-[#5533ff]  text-center text-white p-3 rounded-sm `}
+        >
+          Resume course
+        </Link>
+      ) : (
+        <button
+          onClick={handleSumbit}
+          className={`${clasName} bg-[#5533ff]  text-center text-white p-3 rounded-sm `}
+        >
+          Start
+        </button>
+      )}
+    </>
   );
 }
