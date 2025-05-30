@@ -8,3 +8,8 @@ export interface ResourceInterface {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface ResourceForCourse extends ResourceInterface {
+  courseId: string;
+  resourceId: string;
+}

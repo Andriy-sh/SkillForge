@@ -22,7 +22,7 @@ export default async function CourseInfo({ name }: { name: string }) {
   const totalUnits = course.reduce((acc, course) => {
     return (
       acc +
-      (course.course.module?.reduce((sum, mod) => sum + mod._count.units, 0) ??
+      (course.course.module?.reduce((sum, mod) => sum + (mod._count?.units ?? 0), 0) ??
         0)
     );
   }, 0);

@@ -160,16 +160,16 @@ enum CourseCategory {
 }
 
 model Course {
-  id          String       @id @default(cuid())
-  name        String       @unique
-  description String
-  image       String?
-  price       Int?
-  status      CourseStatus
-  type        CourseType?
-  level       CourseLevel?
-
-  category CourseCategory? @default(FREE)
+  id            String          @id @default(cuid())
+  name          String          @unique
+  description   String
+  image         String?
+  price         Int?
+  status        CourseStatus
+  type          CourseType?
+  level         CourseLevel?
+  currentModule Int?
+  category      CourseCategory? @default(FREE)
 
   optimal      Boolean?
   duration     Int?

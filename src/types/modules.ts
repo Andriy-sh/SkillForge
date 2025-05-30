@@ -7,7 +7,7 @@ export interface ModuleInterface {
   order: number;
   courseId: string;
   units: Unit[];
-  _count: {
-    units: number;
+  _count?: {
+    units?: number;
   };
 }

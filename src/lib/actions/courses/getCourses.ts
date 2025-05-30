@@ -178,15 +178,11 @@ export const getFullCourseByName = async (name: string) => {
   if (cachedCourse) {
     return JSON.parse(cachedCourse);
   }
-  const courseName = await prisma.course.findUnique({
-    where: {
-      name,
-    },
-  });
+
   const course = await prisma.courseResource.findMany({
     where: {
       course: {
-        name: courseName?.name,
+        name: name,
       },
     },
     include: {
@@ -207,3 +203,4 @@ export const getFullCourseByName = async (name: string) => {
 
   return course;
 };
+
