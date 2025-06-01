@@ -59,6 +59,9 @@ export default async function CourseModule({
         <h1 className="text-3xl font-bold mb-4">Syllabus for {courseName}</h1>
         <ul className="flex space-x-4 text-sm text-gray-600">
           <li className="flex items-center gap-2">
+            {unitIcons.information} informations: {counts.information}
+          </li>
+          <li className="flex items-center gap-2">
             {unitIcons.lesson} Lessons: {counts.lesson}
           </li>
           <li className="flex items-center gap-2">

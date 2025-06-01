@@ -1,5 +1,6 @@
 import { ContentType } from "@prisma/client";
 import { Task } from "./tasks";
+import { ModulewithCourseInterface } from "./modules";
 
 export interface Unit {
   id: string;
@@ -16,5 +17,6 @@ export interface Unit {
   updatedAt: Date;
 }
 export interface UnitTasks extends Unit {
+  module: ModulewithCourseInterface;
   task: Task[];
 }

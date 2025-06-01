@@ -13,5 +13,5 @@ export default function page({ params }: { params: Params }) {
   const moduleName = deslugify(module);
   const unitName = deslugify(unit);
   console.log(moduleName, unitName);
-  return <UnitSection unitName={unitName} />;
+  return <UnitSection unitName={unitName} moduleName={moduleName} />;
 }

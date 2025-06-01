@@ -19,7 +19,7 @@ export interface CourseInterface {
   category: CourseCategory | null;
   image: string | null;
   instructorId: string | null;
-  currentModule:number | null
+  currentModule: number | null;
   price: number | null;
   createdAt: Date;
   updatedAt: Date;
