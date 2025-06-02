@@ -27,7 +27,7 @@ export default async function EnrolledInfo({ courseName }: Props) {
   const counts = course.reduce(
     (acc, courseItem) => {
       courseItem.course.module?.forEach((module) => {
-        module.units.forEach((u) => {
+        module.units?.forEach((u) => {
           const key = u.type.toLowerCase() as
             | "information"
             | "lesson"
@@ -50,7 +50,7 @@ export default async function EnrolledInfo({ courseName }: Props) {
   }, []);
   const nextTask = modules.find((module) => {
     if (!module.isCompleted) {
-      return module.units.some((unit) => {
+      return module.units?.some((unit) => {
         return !unit.isCompleted;
       });
     }
@@ -69,7 +69,7 @@ export default async function EnrolledInfo({ courseName }: Props) {
                 clasName="w-[200px] "
                 moduleName={nextTask?.title ? slugify(nextTask.title) : ""}
                 unitName={
-                  nextTask?.units[0].title
+                  nextTask?.units?.[0].title
                     ? slugify(nextTask?.units[0].title)
                     : ""
                 }

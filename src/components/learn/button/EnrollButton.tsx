@@ -25,8 +25,8 @@ export default function EnrollButton({
       const data = new FormData();
       data.append("courseId", courseId);
       data.append("userId", userId || "");
+      router.push(`/learn/module/${moduleName}/unit/${unitName}`);
       await upsertEnrollment(data);
-      router.push("/");
     } catch (error) {
       console.log(error);
     }
@@ -43,7 +43,7 @@ export default function EnrollButton({
       ) : (
         <button
           onClick={handleSumbit}
-          className={`${clasName} bg-[#5533ff]  text-center text-white p-3 rounded-sm `}
+          className={`${clasName} bg-[#5533ff]  text-center text-white p-3 rounded-sm cursor-pointer`}
         >
           Start
         </button>

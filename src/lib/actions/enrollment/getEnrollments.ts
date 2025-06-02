@@ -9,6 +9,7 @@ export const getEnrollments = async (userId: string) => {
   if (cachedEnrollments) {
     return JSON.parse(cachedEnrollments);
   }
+
   const enrollments = await prisma.enrollment.findMany({
     where: {
       userId,
@@ -16,7 +17,11 @@ export const getEnrollments = async (userId: string) => {
     include: {
       course: {
         include: {
-          module: true,
+          module: {
+            include: {
+              CompletedModule: true,
+            },
+          },
           resources: {
             include: {
               resource: true,
@@ -26,20 +31,41 @@ export const getEnrollments = async (userId: string) => {
       },
     },
   });
-  redis.set(`enrollments:${userId}`, JSON.stringify(enrollments));
 
-  return enrollments;
-};
+  const enrollmentsWithProgress = enrollments.map((enrollment) => {
+    const completedModulesCount = enrollment.course.module.filter((module) =>
+      module.CompletedModule.some(
+        (cm) => cm.userId === userId && cm.moduleId === module.id
+      )
+    ).length;
 
-export const getEnrollment = async (userId: string, courseId: string) => {
-  const enrollment = await prisma.enrollment.findUnique({
-    where: {
-      userId_courseId: {
-        userId,
-        courseId,
-      },
-    },
+    return {
+      ...enrollment,
+      completedModulesCount,
+      totalModulesCount: enrollment.course.module.length,
+    };
   });
 
+  await redis.set(
+    `enrollments:${userId}`,
+    JSON.stringify(enrollmentsWithProgress)
+  );
+
+  return enrollmentsWithProgress;
+};
+
+export const getEnrollment = async ({
+  userId,
+  courseId,
+}: {
+  userId: string;
+  courseId: string;
+}) => {
+  const enrollment = await prisma.enrollment.findFirst({
+    where: {
+      userId,
+      courseId,
+    },
+  });
   return enrollment;
 };

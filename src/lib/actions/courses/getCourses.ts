@@ -206,3 +206,13 @@ export const getFullCourseByName = async (name: string) => {
 
   return course;
 };
+
+export const getCourseIdByName = async (name: string) => {
+  const course = await prisma.course.findUnique({
+    where: {
+      name,
+    },
+  });
+
+  return course?.id;
+};

@@ -6,6 +6,7 @@ import {
 } from "@prisma/client";
 import { ResourceInterface } from "./resourses";
 import { ModuleInterface } from "./modules";
+import { Unit } from "./units";
 
 export interface CourseInterface {
   id: string;
@@ -23,16 +24,11 @@ export interface CourseInterface {
   price: number | null;
   createdAt: Date;
   updatedAt: Date;
-  resources?: {
-    courseId: string;
-    resourceId: string;
-    resource: ResourceInterface;
-  }[];
+  resources?: ResourceInterface[] | null;
   module?: ModuleInterface[] | null;
 }
 export interface CoursesInterface {
   courseId: string;
-  resourceId: string;
   course: CourseInterface;
 }
 export interface CourseWithResourceInterface {
@@ -48,3 +44,12 @@ export interface FullCourse {
   resource: ResourceInterface;
   course: CourseInterface;
 }
+
+export type EnrollmentWithCourse = {
+  courseId: string;
+  course: CourseInterface & {
+    module: (ModuleInterface & {
+      units: Unit[];
+    })[];
+  };
+};

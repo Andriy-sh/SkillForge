@@ -13,10 +13,13 @@ import React from "react";
 import EnrollButton from "../button/EnrollButton";
 import { ModuleInterface } from "@/types/modules";
 import { slugify } from "@/lib/utils/strings";
+import { getEnrollment } from "@/lib/actions/enrollment/getEnrollments";
+import { auth } from "../../../../auth";
 
 export default async function CourseInfo({ name }: { name: string }) {
   const namee = name?.replaceAll("-", " ") || name;
   const course: CoursesInterface[] = await getFullCourseByName(namee);
+  const session = await auth();
   console.log(course);
   const totalUnits = course.reduce((acc, course) => {
     return (
@@ -35,11 +38,15 @@ export default async function CourseInfo({ name }: { name: string }) {
   }, []);
   const nextTask = modules.find((module) => {
     if (!module.isCompleted) {
-      return module.units.some((unit) => {
+      return module.units?.some((unit) => {
         return !unit.isCompleted;
       });
     }
     return false;
+  });
+  const enrollment = await getEnrollment({
+    courseId: course[0].course.id,
+    userId: session?.user?.id ?? "",
   });
   return (
     <div>
@@ -94,13 +101,13 @@ export default async function CourseInfo({ name }: { name: string }) {
                   <div className="grid grid-cols-2 space-x-4">
                     <EnrollButton
                       courseId={course.course.id}
-                      enrollment={course ? true : false}
+                      enrollment={enrollment ? true : false}
                       clasName="w-[200px] "
                       moduleName={
                         nextTask?.title ? slugify(nextTask.title) : ""
                       }
                       unitName={
-                        nextTask?.units[0].title
+                        nextTask?.units?.[0]?.title
                           ? slugify(nextTask?.units[0].title)
                           : ""
                       }

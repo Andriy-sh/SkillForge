@@ -8,4 +8,7 @@ export interface Enrollment {
   completedAt: Date | null;
   isCompleted: boolean;
   course: CourseInterface;
+
+  completedModulesCount?: number;
+  totalModulesCount?: number;
 }

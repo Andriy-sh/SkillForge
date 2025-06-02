@@ -7,6 +7,10 @@ export interface ResourceInterface {
   description: string;
   createdAt: Date;
   updatedAt: Date;
+  resource?: {
+    name: string;
+    type: ResourceType;
+  };
 }
 
 export interface ResourceForCourse extends ResourceInterface {

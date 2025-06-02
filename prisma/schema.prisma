@@ -27,12 +27,15 @@ model User {
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  friendships  Friendship[]   @relation("UserFriendships")
-  friendsWith  Friendship[]   @relation("UserFriendsWith")
-  Notification Notification[]
-  Enrollment   Enrollment[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  friendships     Friendship[]      @relation("UserFriendships")
+  friendsWith     Friendship[]      @relation("UserFriendsWith")
+  Notification    Notification[]
+  Enrollment      Enrollment[]
+  CompletedUnit   CompletedUnit[]
+  CompletedModule CompletedModule[]
+  CompletedCourse CompletedCourse[]
 }
 
 model Account {
@@ -177,9 +180,10 @@ model Course {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  resources  CourseResource[]
-  Enrollment Enrollment[]
-  module     Module[]
+  resources       CourseResource[]
+  Enrollment      Enrollment[]
+  module          Module[]
+  CompletedCourse CompletedCourse[]
 }
 
 enum ResourceType {
@@ -235,14 +239,15 @@ enum ContentType {
 
 model Module {
   id          String  @id @default(cuid())
-  title       String  
+  title       String
   description String
   order       Int
   courseId    String
   isCompleted Boolean @default(false)
   units       Unit[]
 
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course          Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  CompletedModule CompletedModule[]
 }
 
 model Unit {
@@ -259,8 +264,9 @@ model Unit {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  task   Task[]
+  module        Module          @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  task          Task[]
+  CompletedUnit CompletedUnit[]
 
   @@unique([moduleId, order])
 }
@@ -309,4 +315,37 @@ model BulletList {
   order       Int
   paragraphId String
   paragraph   Paragraph? @relation(fields: [paragraphId], references: [id], onDelete: Cascade)
+}
+
+model CompletedUnit {
+  userId      String
+  unitId      String
+  completedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  unit Unit @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@id([userId, unitId])
+}
+
+model CompletedModule {
+  userId      String
+  moduleId    String
+  completedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, moduleId])
+}
+
+model CompletedCourse {
+  userId      String
+  courseId    String
+  completedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@id([userId, courseId])
 }

@@ -21,10 +21,10 @@ export default function RecentCourses({
             </div>
             <TopicButton
               resourseName={
-                course.course.resources?.[0]?.resource.name || "tttt"
+                course.course.resources?.[0]?.resource?.name || "tttt"
               }
               resourseType={
-                course.course.resources?.[0]?.resource.type.toLowerCase() ||
+                course.course.resources?.[0]?.resource?.type?.toLowerCase() ||
                 "tttt"
               }
             />
@@ -48,7 +48,7 @@ export default function RecentCourses({
                     className="bg-blue-600 h-2.5 rounded-full"
                     style={{
                       width: `${
-                        ((course.course.currentModule ?? 0) /
+                        ((course.completedModulesCount ?? 0) /
                           (course.course.module?.length || 1)) *
                         100
                       }%`,
@@ -56,7 +56,7 @@ export default function RecentCourses({
                   ></div>
                 </div>
                 <div className="text-sm text-gray-500 mt-1">
-                  {course.course.currentModule} of{" "}
+                  {course.completedModulesCount} of{" "}
                   {course.course.module?.length} modules completed
                 </div>
               </div>

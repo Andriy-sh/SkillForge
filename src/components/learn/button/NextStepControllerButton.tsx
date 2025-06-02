@@ -1,21 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { completeCourse } from "@/lib/actions/courses/completeCourse";
+import { completeModule } from "@/lib/actions/modules/completeModule";
+import { completeUnit } from "@/lib/actions/units/completeUnit";
+import { useUserStore } from "@/lib/store/userStore";
 import { slugify } from "@/lib/utils/strings";
 import { ModuleInterface } from "@/types/modules";
 import { Unit } from "@/types/units";
 import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
-
-// 🔧 Заглушки (заміни на справжні імпорти)
-async function completeUnit(unitId: string) {
-  console.log("✅ Unit completed:", unitId);
-}
-async function completeModule(moduleId: string) {
-  console.log("✅ Module completed:", moduleId);
-}
-async function completeCourse(courseId: string) {
-  console.log("🎓 Course completed:", courseId);
-}
 
 type Props = {
   unitIndex: number;
@@ -35,7 +28,7 @@ export default function NextStepControllerButton({
   modules,
 }: Props) {
   const router = useRouter();
-
+  const userId = useUserStore((state) => state.user?.id);
   const sortedModules = useMemo(() => {
     if (!modules) return [];
     return modules.slice().sort((a, b) => a.order - b.order);
@@ -80,11 +73,9 @@ export default function NextStepControllerButton({
     const units = getSortedUnits(moduleIndex);
     const currentUnit = units[unitIndex];
     const currentModule = sortedModules[moduleIndex];
-
     if (currentUnit) {
-      await completeUnit(currentUnit.id);
+      await completeUnit({ unitId: currentUnit.id, userId: userId ?? "" });
     }
-
     if (unitIndex + 1 < units.length) {
       const nextUnit = units[unitIndex + 1]?.title;
       if (nextUnit && currentModule) {
@@ -94,13 +85,15 @@ export default function NextStepControllerButton({
           )}`
         );
       }
+
       return;
     }
-
     if (currentModule) {
-      await completeModule(currentModule.id);
+      await completeModule({
+        moduleId: currentModule.id,
+        userId: userId ?? "",
+      });
     }
-
     if (moduleIndex + 1 < sortedModules.length) {
       const nextModuleUnits = getSortedUnits(moduleIndex + 1);
       const nextModule = sortedModules[moduleIndex + 1];
@@ -110,16 +103,29 @@ export default function NextStepControllerButton({
           `/learn/module/${slugify(nextModule.title)}/unit/${slugify(nextUnit)}`
         );
       }
+
       return;
     }
-
-    alert("Ви завершили всі модулі 🎉");
   };
 
   const handleCompleteCourse = async () => {
-    await completeCourse(courseId);
-    alert("🎉 Курс завершено!");
-    router.push("/dashboard"); 
+    const units = getSortedUnits(moduleIndex);
+    const currentUnit = units[unitIndex];
+    const currentModule = sortedModules[moduleIndex];
+
+    router.push("/dashboard");
+    if (currentUnit) {
+      await completeUnit({ unitId: currentUnit.id, userId: userId ?? "" });
+    }
+
+    if (currentModule) {
+      await completeModule({
+        moduleId: currentModule.id,
+        userId: userId ?? "",
+      });
+    }
+
+    await completeCourse({ courseId: courseId, userId: userId ?? "" });
   };
 
   const isCourseCompleted =

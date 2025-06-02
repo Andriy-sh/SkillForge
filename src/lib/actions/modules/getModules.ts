@@ -19,14 +19,3 @@ export const getModulesByCourseName = async (name: string) => {
   return modules;
 };
 
-export const getModuleByName = async (name: string) => {
-  const moduleData = await prisma.module.findUnique({
-    where: {
-      title: name,
-    },
-    include: {
-      units: true,
-    },
-  });
-  return moduleData;
-};
