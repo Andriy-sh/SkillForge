@@ -1,7 +1,7 @@
 import EnrollButton from "@/components/learn/button/EnrollButton";
-import { getFullCourseByName } from "@/lib/actions/courses/getCourses";
+import { getCourseIdByName } from "@/lib/actions/courses/getCourses";
+import { getEnrollmentsCourse } from "@/lib/actions/enrollment/getEnrollments";
 import { slugify } from "@/lib/utils/strings";
-import { CoursesInterface } from "@/types/courses";
 import { ModuleInterface } from "@/types/modules";
 import {
   Book,
@@ -11,6 +11,8 @@ import {
   Puzzle,
 } from "lucide-react";
 import React, { JSX } from "react";
+import { auth } from "../../../../auth";
+import { En } from "@/types/courses";
 
 type Props = {
   courseName: string;
@@ -23,8 +25,16 @@ const unitIcons: Record<string, JSX.Element> = {
   quiz: <GraduationCap className="w-6 h-6" />,
 };
 export default async function EnrolledInfo({ courseName }: Props) {
-  const course: CoursesInterface[] = await getFullCourseByName(courseName);
-  const counts = course.reduce(
+  const courseId = await getCourseIdByName(courseName);
+  const session = await auth();
+
+  const course = await getEnrollmentsCourse({
+    courseId: courseId ?? "",
+    userId: session?.user.id ?? "",
+  });
+  const ecourse: En[] = course ? [course] : [];
+
+  const counts = ecourse.reduce(
     (acc, courseItem) => {
       courseItem.course.module?.forEach((module) => {
         module.units?.forEach((u) => {
@@ -42,7 +52,7 @@ export default async function EnrolledInfo({ courseName }: Props) {
     },
     { information: 0, lesson: 0, article: 0, exercise: 0, project: 0, quiz: 0 }
   );
-  const modules = course.reduce<ModuleInterface[]>((acc, courseItem) => {
+  const modules = ecourse.reduce<ModuleInterface[]>((acc, courseItem) => {
     courseItem.course.module?.forEach((module) => {
       acc.push(module);
     });
@@ -58,7 +68,7 @@ export default async function EnrolledInfo({ courseName }: Props) {
   });
   return (
     <div className=" mt-10">
-      {course.map((course) => (
+      {ecourse.map((course) => (
         <div key={course.course.id}>
           <div className="grid grid-cols-[5fr_3fr]">
             <div className=" flex flex-col p-8 space-y-5">

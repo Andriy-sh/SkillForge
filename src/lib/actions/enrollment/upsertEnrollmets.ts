@@ -1,5 +1,6 @@
 "use server";
 
+import redis from "@/lib/redis";
 import { prisma } from "../../../../prisma";
 
 export const upsertEnrollment = async (data: FormData) => {
@@ -23,4 +24,5 @@ export const upsertEnrollment = async (data: FormData) => {
       courseId,
     },
   });
+  await redis.del(`enrollments:${userId}`);
 };

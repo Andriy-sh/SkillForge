@@ -9,7 +9,7 @@ export const getModulesByCourseName = async (name: string) => {
         name: name,
       },
     },
-    orderBy: {
+    orderBy: { 
       order: "asc",
     },
     include: {

@@ -20,7 +20,6 @@ export default async function CourseInfo({ name }: { name: string }) {
   const namee = name?.replaceAll("-", " ") || name;
   const course: CoursesInterface[] = await getFullCourseByName(namee);
   const session = await auth();
-  console.log(course);
   const totalUnits = course.reduce((acc, course) => {
     return (
       acc +

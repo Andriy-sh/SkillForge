@@ -69,3 +69,40 @@ export const getEnrollment = async ({
   });
   return enrollment;
 };
+
+export const getEnrollmentsCourse = async ({
+  userId,
+  courseId,
+}: {
+  userId: string;
+  courseId: string;
+}) => {
+  const enrollment = await prisma.enrollment.findUnique({
+    where: {
+      userId_courseId: {
+        userId,
+        courseId,
+      },
+    },
+    include: {
+      course: {
+        include: {
+          module: {
+            orderBy: {
+              order: "asc",
+            },
+            include: {
+              units: true,
+            },
+          },
+          resources: {
+            include: {
+              resource: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  return enrollment;
+};

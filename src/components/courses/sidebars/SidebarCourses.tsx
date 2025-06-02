@@ -10,20 +10,18 @@ export default function SidebarCourses({
   const [isCoursesExpanded, setIsCoursesExpanded] = useState(true);
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 h-full">
+    <div className="w-64 border-r border-gray-200 h-full">
       <div className="p-4 space-y-6">
-        <h1 className="text-2xl font-bold text-gray-900">All topics</h1>
         <div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Explore Courses
-          </h3>
           <button
             onClick={() => setIsCoursesExpanded(!isCoursesExpanded)}
             className="flex items-center justify-between w-full text-left font-medium text-gray-700 hover:text-gray-900"
           >
-            <span className="text-base">Browse all courses</span>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Explore Courses
+            </h3>
             <svg
-              className={`w-5 h-5 transform transition-transform ${
+              className={`w-5 h-5 transform transition-transform mb-2 ${
                 isCoursesExpanded ? "rotate-180" : ""
               }`}
               fill="none"
@@ -47,7 +45,7 @@ export default function SidebarCourses({
                   href={`/courses/${resourse.type.toLowerCase()}/${
                     resourse.name
                   }`}
-                  className="flex items-center py-2 px-3 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg transition-colors"
+                  className="flex items-center py-2 px-3 font-semibold text-sm text-gray-600 transition-transform duration-300 ease-in-out  hover:text-global hover:font-bold hover:scale-105  rounded-lg  "
                 >
                   <span>{resourse.name}</span>
                 </Link>

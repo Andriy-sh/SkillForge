@@ -7,7 +7,11 @@ import {
 import { ResourceInterface } from "./resourses";
 import { ModuleInterface } from "./modules";
 import { Unit } from "./units";
-
+export interface NestedResource {
+  resource: ResourceInterface;
+  courseId: string;
+  resourceId: string;
+}
 export interface CourseInterface {
   id: string;
   name: string;
@@ -24,7 +28,7 @@ export interface CourseInterface {
   price: number | null;
   createdAt: Date;
   updatedAt: Date;
-  resources?: ResourceInterface[] | null;
+  resources?: NestedResource[] | null;
   module?: ModuleInterface[] | null;
 }
 export interface CoursesInterface {
@@ -53,3 +57,13 @@ export type EnrollmentWithCourse = {
     })[];
   };
 };
+
+export interface En {
+  userId: string;
+  courseId: string;
+  progress: number;
+  completedAt: Date | null;
+  enrolledAt: Date;
+  isCompleted: boolean;
+  course: CourseInterface;
+}
