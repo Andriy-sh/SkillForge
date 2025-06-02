@@ -12,7 +12,7 @@ export const getUnit = async (title: string) => {
   const units = await prisma.unit.findMany({
     where: {
       title: {
-        equals: "Welcome To Javascript",
+        equals: title,
         mode: "insensitive",
       },
     },

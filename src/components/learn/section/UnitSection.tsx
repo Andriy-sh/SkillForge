@@ -27,9 +27,16 @@ export default async function UnitSection({ unitName }: Props) {
   const unit = units[0];
   const unitIndex = unit.order;
   const { module } = unit;
+  const moduleIndex = unit.module.course.module?.findIndex(
+    (m) => m.id === unit.module.id
+  );
+
   const totalUnits =
-    unit.module.course.module?.[module.order].units?.length ?? null;
-  console.log("module", unit);
+    moduleIndex !== undefined && unit.module.course.module
+      ? unit.module.course.module[moduleIndex]?.units?.length ?? null
+      : null;
+
+  console.log(totalUnits);
   return (
     <section className="max-w-4xl mx-auto px-6 py-10 font-pixel bg-background text-foreground">
       <header className="mb-10">
@@ -96,7 +103,7 @@ export default async function UnitSection({ unitName }: Props) {
         totalModules={unit.module.course.module?.length ?? null}
         totalUnits={totalUnits}
         unitIndex={unitIndex}
-        unitName={unitName}
+        modules={unit.module.course.module}
       />
     </section>
   );
