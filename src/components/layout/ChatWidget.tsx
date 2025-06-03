@@ -1,10 +1,12 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import GeminiChatBot from "./GeminiChatBot";
+import { useChatStore } from "@/lib/store/chatStore";
+import clsx from "clsx";
 
 export default function ChatWidget() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, openChat, closeChat } = useChatStore();
   const widgetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -13,7 +15,7 @@ export default function ChatWidget() {
         widgetRef.current &&
         !widgetRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        closeChat();
       }
     };
 
@@ -24,10 +26,10 @@ export default function ChatWidget() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen, closeChat]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 w-[460px] h-[550px]">
+    <div className="fixed bottom-6 right-6 z-50 ">
       <div className="relative w-full h-full">
         <AnimatePresence>
           {isOpen && (
@@ -46,9 +48,11 @@ export default function ChatWidget() {
               }}
               exit={{ scale: 0.5, opacity: 0, transformOrigin: "bottom right" }}
               transition={{ duration: 0.1, ease: "easeInOut" }}
-              className="absolute shadow-[6px_6px_0px_rgba(0,0,0,0.9)] bottom-0 right-0 w-full h-full  bg-white flex flex-col border-1 border-black overflow-hidden"
+              className={clsx(
+                "absolute  w-[460px] h-[550px] shadow-[6px_6px_0px_rgba(0,0,0,0.9)] bottom-0 right-0  bg-white flex flex-col border-1 border-black overflow-hidden"
+              )}
             >
-              <GeminiChatBot onClose={() => setIsOpen(false)} />
+              <GeminiChatBot />
             </motion.div>
           )}
         </AnimatePresence>
@@ -61,7 +65,7 @@ export default function ChatWidget() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
               transition={{ duration: 0.1, ease: "easeInOut" }}
-              onClick={() => setIsOpen(true)}
+              onClick={() => openChat()}
               className="absolute bottom-0 right-0 bg-white border border-gray-300 rounded-full shadow-md p-3 hover:shadow-lg transition"
             >
               <span className="absolute -top-1 -left-2 bg-yellow-400 text-xs text-black px-2 py-[1px] rounded-full font-semibold">

@@ -122,3 +122,8 @@
     @apply bg-background text-foreground;
   }
 }
+.bg-dot-pattern {
+  background-color: #10162f;
+  background-image: radial-gradient(#334155 1px, transparent 1px);
+  background-size: 8px 8px;
+}

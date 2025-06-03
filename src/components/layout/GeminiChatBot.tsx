@@ -3,14 +3,21 @@ import React, { useEffect, useRef, useState } from "react";
 import { SendHorizonal, Sparkles, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import clsx from "clsx";
+import { useChatStore } from "@/lib/store/chatStore";
 
-export default function GeminiChatBot({ onClose }: { onClose: () => void }) {
+export default function GeminiChatBot() {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<
     { role: "user" | "bot"; content: string }[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { initialMessage, closeChat } = useChatStore();
 
+  useEffect(() => {
+    if (initialMessage) {
+      setMessage(initialMessage);
+    }
+  }, [initialMessage]);
   const presetQuestions = [
     "What should I learn in 2025 to grow in tech?",
     "How can I validate my programming skills?",
@@ -72,23 +79,25 @@ export default function GeminiChatBot({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-white overflow-hidden">
+    <div
+      className={clsx("flex flex-col h-full w-full bg-white overflow-hidden ")}
+    >
       <div className="flex items-center justify-between px-6 py-4.5 bg-blue-600 text-white ">
         <div className="flex items-center justify-between space-x-2 text-xl font-bold w-full">
           <p className="flex items-center space-x-2">
             <Sparkles />
             <span>AI Learning Assistant</span>
           </p>
-          <button onClick={onClose}>
+          <button onClick={closeChat}>
             <X className="w-5 h-5" />
           </button>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 text-sm">
+      <div className="flex-1 overflow-y-auto p-8 space-y-4 text-sm">
         {chatHistory.length === 0 ? (
           <div>
-            <h2 className="text-lg font-semibold text-gray-800 mb-3">
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">
               Start a conversation and find learning to match your goals
             </h2>
             <div className="flex flex-col gap-2">
@@ -96,9 +105,9 @@ export default function GeminiChatBot({ onClose }: { onClose: () => void }) {
                 <button
                   key={idx}
                   onClick={() => handlePresetClick(q)}
-                  className="text-left px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md border border-gray-200"
+                  className="text-left px-4 py-2 flex items-center gap-2 bg-gray-300 hover:bg-gray-200 text-gray-800 rounded-md border border-gray-200"
                 >
-                  ✨ {q}
+                  <Sparkles /> {q}
                 </button>
               ))}
             </div>
