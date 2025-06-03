@@ -216,3 +216,27 @@ export const getCourseIdByName = async (name: string) => {
 
   return course?.id;
 };
+
+export const getLast15Courses = async () => {
+  try {
+    const cachedCourses = await redis.get("last_15_courses");
+
+    if (cachedCourses) {
+      return JSON.parse(cachedCourses);
+    }
+
+    const courses = await prisma.courseResource.findMany({
+      include: {
+        resource: true,
+        course: true,
+      },
+      take: 15,
+    });
+
+    await redis.set("last_15_courses", JSON.stringify(courses));
+    return courses;
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    return [];
+  }
+};

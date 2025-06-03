@@ -2,7 +2,6 @@ import React from "react";
 import { BarChart } from "lucide-react";
 import { CourseLevel, CourseCategory } from "@prisma/client";
 import Link from "next/link";
-
 interface CareerPathCardProps {
   title: string;
   description: string;
@@ -42,7 +41,7 @@ export function CourseCard({
 
   return (
     <Link href={href}>
-      <div className="flex h-[280px] p-2 flex-col rounded-sm border border-black bg-white hover:shadow-lg transition-all w-full max-w-sm justify-between">
+      <div className="flex h-[280px] w-[300px] p-2 flex-col rounded-sm border border-black bg-white shadow-[8px_8px_0px_rgba(0,0,0,0.3)] hover:shadow-[8px_8px_0px_rgba(0,0,0,0.9)] hover:-translate-y-2 hover:-translate-x-2 transition-all max-w-sm justify-between duration-300">
         <div>
           <p
             className={`${colors.bg} ${colors.text} text-md rounded-sm font-semibold pl-5 p-1`}

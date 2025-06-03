@@ -1,5 +1,5 @@
-import CourseFilter from "@/components/courses/explore/CourseExplore";
-import CourseIntroSection from "@/components/courses/explore/CourseIntroSection";
+import CourseFilter from "@/components/courses/section/CourseExplore";
+import CourseIntroSection from "@/components/courses/section/CourseIntroSection";
 import CourseSidebar from "@/components/courses/sidebars/CourseSidebar";
 import CourseSidebarFilter from "@/components/courses/sidebars/CourseSidebarFilter";
 import CourseCountHeader from "@/components/courses/summary/CourseCountHeader";
