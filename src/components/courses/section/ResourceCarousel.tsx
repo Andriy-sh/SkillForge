@@ -1,13 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import ResoursCard from "../cards/ResoursCard";
+import ResourceCard from "../cards/ResourceCard";
 
-interface CourseCarouselProps {
-  names: string[];
+interface Resource {
+  name: string;
+  type: string;
 }
 
-export function ResoursCarousel({ names }: CourseCarouselProps) {
+interface CourseCarouselProps {
+  names: Resource[];
+}
+
+export function ResourceCarousel({ names }: CourseCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 3;
 
@@ -32,7 +37,7 @@ export function ResoursCarousel({ names }: CourseCarouselProps) {
     <div className="space-y-12 ">
       <section className="flex flex-col items-center w-full px-10 py-6">
         <div className="flex justify-between items-center w-full max-w-6xl mb-6">
-          <h2 className="text-2xl font-bold">Latest Resources</h2>
+          <h2 className="text-2xl font-bold">Trending subjects & languages</h2>
           <div className="space-x-2">
             <button
               onClick={handlePrev}
@@ -60,8 +65,12 @@ export function ResoursCarousel({ names }: CourseCarouselProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-center">
-          {visibleNames.map((name) => (
-            <ResoursCard key={name} name={name} />
+          {visibleNames.map((item) => (
+            <ResourceCard
+              key={item.name}
+              name={item.name}
+              href={`/courses/${item.type.toLocaleLowerCase()}/${item.name}`}
+            />
           ))}
         </div>
       </section>

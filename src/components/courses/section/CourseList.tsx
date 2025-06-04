@@ -3,17 +3,16 @@
 import { getLast15Courses } from "@/lib/actions/courses/getCourses";
 import { CourseWithResourceInterface } from "@/types/courses";
 import { CourseCarousel } from "./CourseCarousel";
-import { ResoursCarousel } from "./ResoursCarousel";
+import { ResourceCarousel } from "./ResourceCarousel";
+import { get15NamesOfMostPopularResources } from "@/lib/actions/resources/getResources";
 
 export async function CourseList() {
   const courseResources: CourseWithResourceInterface[] =
     await getLast15Courses();
-
+  const resources = await get15NamesOfMostPopularResources();
   return (
     <div className="flex flex-col">
-      <ResoursCarousel
-        names={["name", "name1", "name2", "name4", "name5", "name6"]}
-      />
+      <ResourceCarousel names={resources} />
 
       <CourseCarousel courseResources={courseResources} />
     </div>

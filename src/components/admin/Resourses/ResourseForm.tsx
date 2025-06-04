@@ -15,7 +15,7 @@ import {
   SelectContent,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { upsertResources } from "@/lib/actions/resourses/upsertResourses";
+import { upsertResources } from "@/lib/actions/resources/upsertResources";
 import { ResourseSchema, resourseSchema } from "@/schemas/admin/resourses";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResourceType } from "@prisma/client";

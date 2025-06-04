@@ -36,7 +36,7 @@ export function CourseCarousel({ courseResources }: CourseCarouselProps) {
     <div className="space-y-12 px-10 py-6">
       <section>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Latest Courses</h2>
+          <h2 className="text-2xl font-bold">Featured courses and paths</h2>
           <div className="space-x-2">
             <button
               onClick={handlePrev}

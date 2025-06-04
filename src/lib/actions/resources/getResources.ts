@@ -28,3 +28,24 @@ export const getResourseByName = async (name: string) => {
   });
   return resourse;
 };
+
+export const get15NamesOfMostPopularResources = async () => {
+  const cachedResources = await redis.get("most_popular_resources");
+
+  if (cachedResources) {
+    return JSON.parse(cachedResources);
+  }
+
+  const resourses = await prisma.resource.findMany({
+    take: 15,
+    orderBy: {
+      courses: { _count: "desc" },
+    },
+    select: {
+      name: true,
+      type: true,
+    },
+  });
+  await redis.set("most_popular_resources", JSON.stringify(resourses));
+  return resourses;
+};
