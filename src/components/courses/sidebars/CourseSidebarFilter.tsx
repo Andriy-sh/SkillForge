@@ -2,7 +2,7 @@ import React from "react";
 
 export default function CourseSidebarFilter() {
   return (
-    <aside className=" p-4 text-sm space-y-6">
+    <aside className=" p-4 text-sm space-y-6 mt-5">
       <div className="flex justify-between items-center font-semibold text-lg">
         <span>Filters</span>
         <button className="text-gray-500 hover:underline text-sm">

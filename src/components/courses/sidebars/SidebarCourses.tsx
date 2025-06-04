@@ -54,7 +54,7 @@ export default function SidebarCourses({
                     href={`/courses/${course.type.toLowerCase()}/${
                       course.name
                     }`}
-                    className="block py-1 px-2 text-sm text-gray-600 hover:text-global hover:font-bold hover:scale-[1.03] transition-transform duration-300 rounded"
+                    className="block py-1 px-2 text-sm text-gray-600 hover:text-global hover:font-bold hover:scale-[1.03] transition-transform duration-300 rounded relative pl-4 before:content-['•'] before:absolute before:left-0 before:text-gray-500"
                   >
                     {course.name}
                   </Link>

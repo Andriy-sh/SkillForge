@@ -142,6 +142,28 @@ export const getCoursesWithResourceByName = async (name: string) => {
   }
 };
 
+export const getAllCoursesWithResourceByName = async () => {
+  try {
+    const cachedCourses = await redis.get(`allcourseswithresource`);
+
+    if (cachedCourses) {
+      return JSON.parse(cachedCourses);
+    }
+    const courses = await prisma.courseResource.findMany({
+      include: {
+        course: true,
+        resource: true,
+      },
+    });
+
+    await redis.set(`allcourseswithresource`, JSON.stringify(courses));
+    return courses;
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    return [];
+  }
+};
+
 export const getCoursesByResourseName = async (name: string) => {
   try {
     const cachedCourses = await redis.get(`courses:${name}`);
