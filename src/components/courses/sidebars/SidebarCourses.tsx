@@ -33,11 +33,17 @@ export default function SidebarCourses({
           Explore Courses
         </h3>
 
-        <Accordion type="multiple" className="space-y-2">
+        <Accordion
+          type="multiple"
+          defaultValue={Object.keys(grouped)}
+          className="space-y-2"
+        >
           {Object.entries(grouped).map(([type, courses]) => (
             <AccordionItem key={type} value={type}>
-              <AccordionTrigger className="flex justify-between font-semibold items-center capitalize  text-gray-700 hover:text-gray-900">
-                <span>{type}</span>
+              <AccordionTrigger className="flex justify-between font-semibold text-lg items-center capitalize  text-gray-700 hover:text-gray-900">
+                <span>
+                  {type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}
+                </span>
                 <ChevronDown className="h-4 w-4 transition-transform duration-200 accordion-trigger-icon" />
               </AccordionTrigger>
 

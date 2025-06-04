@@ -11,9 +11,8 @@ export async function CourseList() {
     await getLast15Courses();
   const resources = await get15NamesOfMostPopularResources();
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col py-5  gap-20">
       <ResourceCarousel names={resources} />
-
       <CourseCarousel courseResources={courseResources} />
     </div>
   );

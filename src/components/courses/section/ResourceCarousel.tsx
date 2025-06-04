@@ -35,7 +35,7 @@ export function ResourceCarousel({ names }: CourseCarouselProps) {
 
   return (
     <div className="space-y-12 ">
-      <section className="flex flex-col items-center w-full px-10 py-6">
+      <section className="flex flex-col items-center w-full ">
         <div className="flex justify-between items-center w-full max-w-6xl mb-6">
           <h2 className="text-2xl font-bold">Trending subjects & languages</h2>
           <div className="space-x-2">
