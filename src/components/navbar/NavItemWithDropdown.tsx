@@ -3,19 +3,16 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 
-type Props = {
-  link: {
-    label: string;
-    href: string;
-    dropdown?: boolean;
-    dropdownItems?: {
-      label: string;
-      href: string;
-    }[];
-  };
+type Course = {
+  name: string;
+  type: string;
 };
 
-export default function NavItemWithDropdown({ link }: Props) {
+export default function NavItemWithDropdown({
+  courses,
+}: {
+  courses: Course[];
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -28,7 +25,6 @@ export default function NavItemWithDropdown({ link }: Props) {
         setIsOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -53,13 +49,13 @@ export default function NavItemWithDropdown({ link }: Props) {
   }, [isOpen]);
 
   return (
-    <div ref={containerRef} className="relative ">
+    <div ref={containerRef} className="relative">
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-1 cursor-pointer text-lg font-semibold text-gray-700 hover:text-blue-500 transition-colors duration-200 dark:text-gray-200 dark:hover:text-white ease-in-out dark:hover:bg-gray-800"
+        className="flex items-center gap-1 cursor-pointer text-lg font-semibold text-gray-700 hover:text-blue-500 transition-colors duration-200"
       >
-        <span>{link.label}</span>
+        <span>Courses</span>
         <ChevronDown
           className={`w-4 h-4 transition-transform duration-200 ease-in-out ${
             isOpen ? "rotate-180" : ""
@@ -67,8 +63,8 @@ export default function NavItemWithDropdown({ link }: Props) {
         />
       </button>
       {isOpen && (
-        <div className="dropdown-menu border-1 flex absolute top-11 left-0 mt-2 w-[900px] bg-white dark:bg-gray-800  border-gray-700 dark:border-gray-700  shadow-lg transform">
-          <div className="w-80 bg-[#0A0E23] text-white p-8  flex flex-col justify-between">
+        <div className="dropdown-menu border-1 flex absolute top-11 left-0 mt-2 w-[900px] bg-white shadow-lg z-50">
+          <div className="w-80 bg-[#0A0E23] text-white p-8 flex flex-col justify-between">
             <div className="flex flex-col justify-between h-full">
               <div>
                 <h3 className="text-xl font-bold mb-3">
@@ -88,16 +84,16 @@ export default function NavItemWithDropdown({ link }: Props) {
           </div>
           <div className="flex-1 p-8">
             <div className="grid grid-cols-3 gap-6">
-              {link.dropdownItems?.map((dropdown, index) => (
+              {courses.map((course, index) => (
                 <Link
                   key={index}
-                  href={dropdown.href}
-                  className="flex items-start dark:hover:bg-gray-700 transition-all duration-200 ease-in-out group  hover:border-gray-200 dark:hover:border-gray-600"
+                  href={`/courses/${course.type.toLowerCase()}/${course.name.toLowerCase()}`}
+                  className="flex items-start group hover:bg-gray-100 transition-all duration-200 p-2 rounded"
                   onClick={() => setIsOpen(false)}
                 >
                   <div className="w-full">
-                    <div className="font-medium text-sm text-gray-900 dark:text-white group-hover:text-[#3a10e5] dark:group-hover:text-blue-400 transition-colors duration-200 mb-1">
-                      {dropdown.label}
+                    <div className="font-medium text-sm text-gray-900 group-hover:text-[#3a10e5] transition-colors duration-200 mb-1">
+                      {course.name}
                     </div>
                   </div>
                 </Link>

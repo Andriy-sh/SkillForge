@@ -25,7 +25,6 @@ export const navbarConfig: NavbarConfig[] = [
       { label: "Software Testing", href: "/courses/testing" },
       { label: "Project Management", href: "/courses/project-management" },
       { label: "System Architecture", href: "/courses/system-architecture" },
-
     ],
   },
   {

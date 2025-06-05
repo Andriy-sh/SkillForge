@@ -5,6 +5,8 @@ import { slugify } from "@/lib/utils/strings";
 import { ModuleInterface } from "@/types/modules";
 import {
   Book,
+  BookAudioIcon,
+  BookCopy,
   FileText,
   GraduationCap,
   ListChecks,
@@ -19,7 +21,8 @@ type Props = {
 };
 
 const unitIcons: Record<string, JSX.Element> = {
-  lesson: <Book className="w-6 h-6" />,
+  information: <BookAudioIcon className="w-6 h-6" />,
+  lesson: <BookCopy className="w-6 h-6" />,
   article: <FileText className="w-6 h-6" />,
   exercise: <ListChecks className="w-6 h-6 " />,
   project: <Puzzle className="w-6 h-6" />,

@@ -5,31 +5,32 @@ import Image from "next/image";
 import NavItemWithDropdown from "./NavItemWithDropdown";
 import Notification from "./Notification";
 import NavBarProfile from "./NavBarProfile";
-import { navbarConfig } from "./navbar.config";
 import { navbarAuthConfig } from "./navbarAuth.config";
 import { User } from "@/schemas/User/User";
 import { Session } from "next-auth";
 import { NotificationSchema } from "@/schemas/notification/notification";
 import { usePathname } from "next/navigation";
-
+import NavItemLink from "./NavItemLink";
+type p = {
+  name: string;
+  type: string;
+};
 export default function NavBarClient({
   session,
   user,
   notifications,
   senders,
+  courses,
 }: {
   session: Session | null;
   user: User | null;
   notifications: NotificationSchema[];
   senders: User[];
+  courses: p[];
 }) {
-  const filteredNavbarConfig = session
-    ? navbarConfig.filter(
-        (link) => link.href !== "/signup" && link.href !== "/login"
-      )
-    : navbarConfig;
   const pathname = usePathname();
   const isCoursePage = pathname.startsWith("/enrolled/courses/");
+  console.log(courses);
   return (
     <header
       className={`flex h-[9vh] sticky top-0 justify-around items-center bg-background ${
@@ -47,19 +48,8 @@ export default function NavBarClient({
               height={150}
             />
           </Link>
-          {filteredNavbarConfig.map((link, index) =>
-            link.dropdown ? (
-              <NavItemWithDropdown key={index} link={link} />
-            ) : (
-              <Link
-                key={index}
-                href={link.href}
-                className="text-lg font-semibold text-gray-700 hover:text-blue-500 transition-colors duration-200"
-              >
-                {link.label}
-              </Link>
-            )
-          )}
+          <NavItemLink href="/learn" label="My Home"  />
+          <NavItemWithDropdown courses={courses} />
         </div>
         <div className="flex space-x-4">
           {session && user ? (
