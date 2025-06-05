@@ -1,6 +1,6 @@
 import React from "react";
-import LearnDashboard from "./LearnDashboard";
+import LearnDashboard from "./section/LearnDashboard";
 
-export default function Learn({ course }: { course: string[] }) {
-  return <LearnDashboard course={course} />;
+export default function Learn() {
+  return <LearnDashboard />;
 }
