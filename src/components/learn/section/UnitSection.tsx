@@ -3,6 +3,7 @@ import { UnitTasks } from "@/types/units";
 import { BookOpen, CheckCircle, CirclePlay, X } from "lucide-react";
 import React from "react";
 import NextStepControllerButton from "../button/NextStepControllerButton";
+import CodeEditorTask from "@/components/CodeEditorTask";
 
 type Props = {
   unitName: string;
@@ -94,6 +95,11 @@ export default async function UnitSection({ unitName }: Props) {
                 </div>
               ))}
             </div>
+            {task.type === "WRITE_CODE" && (
+              <div>
+                <CodeEditorTask />
+              </div>
+            )}
           </div>
         ))}
       </div>

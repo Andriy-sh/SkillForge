@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 export default function Certificate() {
@@ -53,7 +54,9 @@ export default function Certificate() {
 
         <div className="relative">
           <div className="w-[400px] h-[300px] bg-white rounded-lg shadow-xl p-6 rotate-3 transform hover:rotate-0 transition-transform">
-            <img
+            <Image
+              width={200}
+              height={200}
               src="/skillforge_black_logo.png"
               alt="Certificate Preview"
               className="h-8 mb-4"

@@ -14,4 +14,6 @@ export interface Task {
   createdAt: Date;
   updatedAt: Date;
   paragraph: Paragraph[] | null;
+  solution?: string | null;
+  testCases?: Array<{ input: string; output: string }>;
 }
