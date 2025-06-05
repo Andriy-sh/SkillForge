@@ -1,22 +1,16 @@
-"use client";
-import { useSearchParams } from "next/navigation";
-import DashboardHome from "./Dashboard";
-import MyLearning from "./MyLearning/MyLeadning";
-import Workspaces from "./Workspaces";
-import Projects from "./Projects";
-import Events from "./Events";
+import { getEnrollments } from "@/lib/actions/enrollment/getEnrollments";
+import React from "react";
+import { auth } from "../../../../auth";
+import LearnDashboardRouter from "./LearnDashboardRouter";
+import { Enrollment } from "@/types/enrollmets";
 
-export default function LearnDashboard() {
-  const searchParams = useSearchParams();
-  const page = searchParams.get("page") || "dashboard";
+export default async function LearnDashboard() {
+  const session = await auth();
+  const enrollment: Enrollment[] = await getEnrollments(session?.user.id);
 
-  const pages = {
-    dashboard: <DashboardHome />,
-    "my-learning": <MyLearning />,
-    events: <Events />,
-    projects: <Projects />,
-    workspaces: <Workspaces />,
-  };
-
-  return pages[page as keyof typeof pages] ?? null;
+  return (
+    <div>
+      <LearnDashboardRouter enrollment={enrollment} />
+    </div>
+  );
 }

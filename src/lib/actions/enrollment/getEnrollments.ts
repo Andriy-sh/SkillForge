@@ -14,6 +14,9 @@ export const getEnrollments = async (userId: string) => {
     where: {
       userId,
     },
+    orderBy: {
+      updatedAt: "desc",
+    },
     include: {
       course: {
         include: {

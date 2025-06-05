@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import ProgressChoice from "./ProgressChoice";
 
 export default function MyLearning() {
