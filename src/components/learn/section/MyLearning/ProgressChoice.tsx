@@ -43,7 +43,7 @@ export default function ProgressChoice({
           className={`relative flex-1 px-4 py-2 text-md transition-all duration-300 ${
             progress === "completed"
               ? "font-bold text-black"
-              : "text-gray-700 hover:bg-[#f5e0d0]"
+              : "text-gray-700 hover:bg-[# f5e0d0]"
           }`}
         >
           Completed

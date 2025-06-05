@@ -15,6 +15,13 @@ export interface Unit {
   isCompleted: boolean;
   createdAt: Date;
   updatedAt: Date;
+  CompletedUnit?: CompleteUnit[];
+}
+
+export interface CompleteUnit {
+  userId: string;
+  unitId: string;
+  completedAt: Date;
 }
 export interface UnitTasks extends Unit {
   module: ModulewithCourseInterface;

@@ -95,7 +95,11 @@ export const getEnrollmentsCourse = async ({
               order: "asc",
             },
             include: {
-              units: true,
+              units: {
+                include: {
+                  CompletedUnit: true,
+                },
+              },
             },
           },
           resources: {
@@ -107,5 +111,7 @@ export const getEnrollmentsCourse = async ({
       },
     },
   });
+  await redis.set(`enrollmeasdasdnts:${userId}`, JSON.stringify(enrollment));
+
   return enrollment;
 };

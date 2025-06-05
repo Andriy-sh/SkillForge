@@ -31,6 +31,11 @@ export default function EnrollButton({
       console.log(error);
     }
   };
+  if (!userId || !moduleName || !unitName) {
+    console.error("Missing required data for enrollment.");
+    return;
+  }
+
   return (
     <>
       {enrollment ? (
