@@ -48,7 +48,7 @@ export default function LearnSideBar() {
             key={index}
             className={`group relative flex ${
               badge ? "items-center justify-between" : "items-center"
-            } p-2 pl-4  rounded-lg  transition-colors duration-200 ${
+            } p-4 pl-4  rounded-lg  transition-colors duration-200 ${
               isActive ? "bg-[#f6e8de]" : " "
             }`}
           >
@@ -85,18 +85,7 @@ export default function LearnSideBar() {
         );
       })}
 
-      <div className="p-4 bg-yellow-100 rounded-lg shadow">
-        <p className="text-base font-semibold">
-          Try Plus or Pro with a 7-day free trial
-        </p>
-        <p className="text-sm text-gray-700 mt-2">
-          Go deeper and learn job-ready skills. Practice with real-world
-          projects, take assessments, and earn certificates.
-        </p>
-        <button className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg shadow hover:bg-purple-700 transition-colors duration-200">
-          Try for free
-        </button>
-      </div>
+      
     </div>
   );
 }

@@ -24,7 +24,7 @@ export default function LearnDashboardRouter({
     ),
     "my-learning": (
       <Suspense fallback={<div>Loading...</div>}>
-        <MyLearning />
+        <MyLearning enrollment={enrollment} />
       </Suspense>
     ),
     events: <Events />,

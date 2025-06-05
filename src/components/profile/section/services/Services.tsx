@@ -6,7 +6,8 @@ export default async function Services({ userId }: { userId: string }) {
   const enrollment: Enrollment[] = await getEnrollments(userId);
   return (
     <div className="space-y-8">
-      <RecentCourses enrollment={enrollment} /> 
+      <h2 className="text-xl font-bold mb-4">Latest Courses</h2>
+      <RecentCourses enrollment={enrollment} />
 
       <section>
         <h2 className="text-xl font-bold mb-4">Latest Certificates</h2>

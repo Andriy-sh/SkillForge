@@ -4,30 +4,33 @@ import Link from "next/link";
 
 export default function RecentCourses({
   enrollment,
+  topicButton = true,
 }: {
+  topicButton?: boolean;
   enrollment: Enrollment[];
 }) {
   return (
     <section>
-      <h2 className="text-xl font-bold mb-4">Latest Courses</h2>
       {enrollment.map((course) => (
         <div key={course.course.id} className="p-4 grid grid-cols-[4fr_7fr]">
-          <div className="bg-[#2c2760] text-white rounded-lg ">
+          <div className="bg-[#2c2760] text-white  ">
             <div className="flex flex-col p-6">
               <p className="text-[#625c9e]">Course</p>
               <h1 className="text-2xl font-light text-ellipsis">
                 {course.course.name}
               </h1>
             </div>
-            <TopicButton
-              resourseName={
-                course.course.resources?.[0]?.resource?.name || "tttt"
-              }
-              resourseType={
-                course.course.resources?.[0]?.resource?.type?.toLowerCase() ||
-                "tttt"
-              }
-            />
+            {topicButton && (
+              <TopicButton
+                resourseName={
+                  course.course.resources?.[0]?.resource?.name || "tttt"
+                }
+                resourseType={
+                  course.course.resources?.[0]?.resource?.type?.toLowerCase() ||
+                  "tttt"
+                }
+              />
+            )}
           </div>
           <div className="bg-white grid grid-cols-[5fr_3fr]">
             <div className="p-6 font-normal">

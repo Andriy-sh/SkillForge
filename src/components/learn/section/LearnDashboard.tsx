@@ -9,7 +9,7 @@ export default async function LearnDashboard() {
   const enrollment: Enrollment[] = await getEnrollments(session?.user.id);
 
   return (
-    <div>
+    <div className="pt-8">
       <LearnDashboardRouter enrollment={enrollment} />
     </div>
   );

@@ -9,7 +9,8 @@ export default function DashboardHome({
   const recentEnrollment = [enrollment[0]];
   return (
     <div>
-      <RecentCourses enrollment={recentEnrollment} />
+      <h1 className="text-2xl font-semibold px-4 ">Keep learning</h1>
+      <RecentCourses enrollment={recentEnrollment} topicButton={false} />
     </div>
   );
 }
