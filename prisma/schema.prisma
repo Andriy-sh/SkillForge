@@ -291,8 +291,8 @@ model Task {
   isCompleted Boolean  @default(false)
   isOptional  Boolean  @default(false)
 
-  solution    String? 
-  testCases   Json?   
+  solution  String?
+  testCases Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -302,7 +302,6 @@ model Task {
 
   @@unique([unitId, order])
 }
-
 
 model Paragraph {
   id         String       @id @default(cuid())

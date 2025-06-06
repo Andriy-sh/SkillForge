@@ -8,10 +8,16 @@ type Course = {
   type: string;
 };
 
+type NavItemType = "Courses" | "Resources";
+
 export default function NavItemWithDropdown({
   courses,
+  name,
+  type,
 }: {
   courses: Course[];
+  name: string;
+  type: NavItemType;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -55,7 +61,7 @@ export default function NavItemWithDropdown({
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center gap-1 cursor-pointer text-lg font-semibold text-gray-700 hover:text-blue-500 transition-colors duration-200"
       >
-        <span>Courses</span>
+        <span>{name}</span>
         <ChevronDown
           className={`w-4 h-4 transition-transform duration-200 ease-in-out ${
             isOpen ? "rotate-180" : ""
@@ -63,23 +69,37 @@ export default function NavItemWithDropdown({
         />
       </button>
       {isOpen && (
-        <div className="dropdown-menu border-1 flex absolute top-11 left-0 mt-2 w-[900px] bg-white shadow-lg z-50">
+        <div className="dropdown-menu border-1 flex absolute top-11 left-0 mt-2 w-[900px] bg-white shadow-lg z-50 border-black">
           <div className="w-80 bg-[#0A0E23] text-white p-8 flex flex-col justify-between">
             <div className="flex flex-col justify-between h-full">
               <div>
                 <h3 className="text-xl font-bold mb-3">
-                  Popular course topics
+                  {type === "Courses"
+                    ? "Popular course topics"
+                    : "Popular resources"}
                 </h3>
                 <p className="text-gray-300 text-md mb-8">
-                  Explore free or paid courses in topics that interest you.
+                  {type === "Courses"
+                    ? "Explore free or paid courses in topics that interest you."
+                    : "Explore useful resources for your learning journey."}
                 </p>
               </div>
-              <Link
-                href="/courses"
-                className="inline-block bg-yellow-400 text-black font-semibold px-8 py-3 rounded-lg hover:bg-yellow-500 transition-colors text-center w-full"
-              >
-                Explore all courses
-              </Link>
+              {type === "Courses" && (
+                <Link
+                  href="/courses"
+                  className="inline-block bg-yellow-400 text-black font-semibold px-8 py-3 rounded-lg hover:bg-yellow-500 transition-colors text-center w-full"
+                >
+                  Explore all courses
+                </Link>
+              )}
+              {type === "Resources" && (
+                <Link
+                  href="/resources"
+                  className="inline-block bg-yellow-400 text-black font-semibold px-8 py-3 rounded-lg hover:bg-yellow-500 transition-colors text-center w-full"
+                >
+                  Explore all resources
+                </Link>
+              )}
             </div>
           </div>
           <div className="flex-1 p-8">
@@ -87,7 +107,7 @@ export default function NavItemWithDropdown({
               {courses.map((course, index) => (
                 <Link
                   key={index}
-                  href={`/courses/${course.type.toLowerCase()}/${course.name.toLowerCase()}`}
+                  href={`/${type.toLowerCase()}/docs/${course.name.toLowerCase()}`}
                   className="flex items-start group hover:bg-gray-100 transition-all duration-200 p-2 rounded"
                   onClick={() => setIsOpen(false)}
                 >

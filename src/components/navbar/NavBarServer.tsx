@@ -4,6 +4,7 @@ import { getNotification } from "@/lib/actions/notification/getNotification";
 import { User } from "@/schemas/User/User";
 import NavBarClient from "./NavBarClient";
 import { getResourcesNames } from "@/lib/actions/resources/getResources";
+import { ResourceType } from "@prisma/client";
 
 export default async function NavBarServer() {
   const session = await auth();
@@ -19,7 +20,7 @@ export default async function NavBarServer() {
     : [];
   type p = {
     name: string;
-    type: string;
+    type: ResourceType;
   };
   const courses: p[] = await getResourcesNames();
   console.log(courses);

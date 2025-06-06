@@ -11,9 +11,10 @@ import { Session } from "next-auth";
 import { NotificationSchema } from "@/schemas/notification/notification";
 import { usePathname } from "next/navigation";
 import NavItemLink from "./NavItemLink";
+import { ResourceType } from "@prisma/client";
 type p = {
   name: string;
-  type: string;
+  type: ResourceType;
 };
 export default function NavBarClient({
   session,
@@ -30,7 +31,9 @@ export default function NavBarClient({
 }) {
   const pathname = usePathname();
   const isCoursePage = pathname.startsWith("/enrolled/courses/");
-  console.log(courses);
+  const languageResources = courses.filter(
+    (course) => course.type === "LANGUAGE"
+  );
   return (
     <header
       className={`flex h-[9vh] sticky top-0 justify-around items-center bg-background ${
@@ -48,8 +51,17 @@ export default function NavBarClient({
               height={150}
             />
           </Link>
-          <NavItemLink href="/learn" label="My Home"  />
-          <NavItemWithDropdown courses={courses} />
+          <NavItemLink href="/learn" label="My Home" />
+          <NavItemWithDropdown
+            courses={courses}
+            name="Courses"
+            type="Courses"
+          />
+          <NavItemWithDropdown
+            courses={languageResources}
+            name="Resourses"
+            type="Resources"
+          />
         </div>
         <div className="flex space-x-4">
           {session && user ? (
