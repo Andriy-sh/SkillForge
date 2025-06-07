@@ -1,6 +1,6 @@
 export function slugify(str: string) {
   return str
-    .toLowerCase() // 1
+    .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
@@ -10,4 +10,4 @@ export function deslugify(slug: string) {
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
-}   
+}

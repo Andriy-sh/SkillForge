@@ -30,7 +30,9 @@ export default function NavBarClient({
   courses: p[];
 }) {
   const pathname = usePathname();
-  const isCoursePage = pathname.startsWith("/enrolled/courses/");
+  const isCoursePage =
+    pathname.startsWith("/enrolled/courses/") ||
+    pathname.startsWith("/resources");
   const languageResources = courses.filter(
     (course) => course.type === "LANGUAGE"
   );
