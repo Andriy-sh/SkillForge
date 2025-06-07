@@ -1,11 +1,30 @@
-import { getDocsBySlug } from "@/lib/actions/resourcesDoc/getDoc";
-import { DocsInterface } from "@/types/docs";
 import React from "react";
 import Breadcrumbs from "../ui/CurrentPathIndicator";
+import { getConcept } from "@/lib/actions/concepts/getConcept";
 
-export default async function SectionDocsInfo({ slug }: { slug: string }) {
-  const info: DocsInterface | null = await getDocsBySlug(slug);
-  if (!info) throw new Error("Doc not found");
+interface ConceptInterface {
+  id: string;
+  docId: string;
+  title: string;
+  slug: string;
+  description: string;
+  order: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export default async function ConceptsSection({
+  resource,
+  concept,
+}: {
+  resource: string;
+  concept: string;
+}) {
+  const info: ConceptInterface | null = await getConcept({
+    concept: concept,
+    resource: resource,
+  });
+  if (!info) throw new Error("Concept not found");
   return (
     <section className="flex flex-col gap-5">
       <div className="space-y-5">

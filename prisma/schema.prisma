@@ -368,10 +368,14 @@ model ResourceDoc {
 }
 
 model ConceptTopic {
-  id    String @id @default(cuid())
-  docId String
-  title String
-  order Int
+  id          String   @id @default(cuid())
+  docId       String
+  title       String
+  slug        String
+  description String
+  order       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   doc    ResourceDoc    @relation(fields: [docId], references: [id], onDelete: Cascade)
   blocks ContentBlock[]
