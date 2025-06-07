@@ -1,7 +1,7 @@
-import { getResourcesNames } from "@/lib/actions/resources/getResources";
 import ResourcesListSidebarClient from "./ResourcesListSidebarClient";
+import { getAllDocs } from "@/lib/actions/resourcesDoc/getDoc";
 
 export default async function ResourcesListSidebar() {
-  const resources = await getResourcesNames();
-  return <ResourcesListSidebarClient resources={resources} />;
+  const docs = await getAllDocs();
+  return <ResourcesListSidebarClient resources={docs} />;
 }

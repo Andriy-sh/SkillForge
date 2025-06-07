@@ -201,7 +201,8 @@ model Resource {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  courses CourseResource[]
+  courses     CourseResource[]
+  ResourceDoc ResourceDoc[]
 }
 
 model CourseResource {
@@ -351,4 +352,48 @@ model CompletedCourse {
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@id([userId, courseId])
+}
+
+model ResourceDoc {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  slug        String   @unique
+  resourceId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  resource Resource       @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  topics   ConceptTopic[]
+}
+
+model ConceptTopic {
+  id    String @id @default(cuid())
+  docId String
+  title String
+  order Int
+
+  doc    ResourceDoc    @relation(fields: [docId], references: [id], onDelete: Cascade)
+  blocks ContentBlock[]
+}
+
+enum ContentBlockType {
+  TEXT
+  BULLETS
+  CODE
+  NOTE
+  EXAMPLE
+  IMAGE
+}
+
+model ContentBlock {
+  id      String           @id @default(cuid())
+  topicId String
+  type    ContentBlockType
+  content String
+
+  order Int
+  topic ConceptTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@unique([topicId, order])
 }
