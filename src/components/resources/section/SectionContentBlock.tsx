@@ -5,10 +5,11 @@ import { Copy, CopyCheck } from "lucide-react";
 
 type ContentBlock = {
   id: string;
-  title: string;
+  title?: string;
   topicId: string;
   type: ContentBlockType;
   content: string;
+  description?: string;
   order: number;
 };
 
@@ -33,9 +34,10 @@ export const SectionContentBlock: React.FC<Props> = ({ blocks }) => {
             return (
               <div key={block.id} className="flex flex-col">
                 {block.title && (
-                  <h2 className="font-bold mb-2">{block.title}</h2>
+                  <h2 className="font-bold mb-2 text-2xl">{block.title}</h2>
                 )}
-                <p className="text-base leading-relaxed">{block.content}</p>
+                <p>{block.description}</p>
+                <p className="text-sm leading-relaxed">{block.content}</p>
               </div>
             );
 
@@ -44,8 +46,10 @@ export const SectionContentBlock: React.FC<Props> = ({ blocks }) => {
             return (
               <div key={block.id} className="flex flex-col">
                 {block.title && (
-                  <h2 className="font-bold mb-2">{block.title}</h2>
+                  <h2 className="font-bold mb-2 text-2xl">{block.title}</h2>
                 )}
+                <p>{block.description}</p>
+
                 <ul className="list-disc list-inside space-y-1">
                   {bullets.map((item, idx) => (
                     <li key={`${block.id}-${idx}`}>{item}</li>
@@ -59,8 +63,10 @@ export const SectionContentBlock: React.FC<Props> = ({ blocks }) => {
             return (
               <div key={block.id} className="flex flex-col relative">
                 {block.title && (
-                  <h2 className="font-bold mb-2">{block.title}</h2>
+                  <h2 className="font-bold mb-2 text-2xl">{block.title}</h2>
                 )}
+                <p>{block.description}</p>
+
                 <button
                   onClick={() => handleCopy(block.content, block.id)}
                   className="absolute top-2 right-2 bg-gray-700 text-white p-1 rounded hover:bg-gray-600 transition"
@@ -86,8 +92,10 @@ export const SectionContentBlock: React.FC<Props> = ({ blocks }) => {
             return (
               <div key={block.id} className="flex flex-col">
                 {block.title && (
-                  <h2 className="font-bold mb-2">{block.title}</h2>
+                  <h2 className="font-bold mb-2 text-2xl">{block.title}</h2>
                 )}
+                <p>{block.description}</p>
+
                 <div className="border-l-4 border-yellow-400 bg-yellow-100 text-yellow-900 p-4 rounded">
                   <strong>Note: </strong>
                   {block.content}
@@ -99,8 +107,9 @@ export const SectionContentBlock: React.FC<Props> = ({ blocks }) => {
             return (
               <div key={block.id} className="flex flex-col relative">
                 {block.title && (
-                  <h2 className="font-bold mb-2">{block.title}</h2>
+                  <h2 className="font-bold mb-2 text-2xl">{block.title}</h2>
                 )}
+                <p>{block.description}</p>
 
                 <div className="bg-blue-50 border-l-4 border-blue-400 text-blue-900 p-4 rounded mt-6">
                   <strong>Example: </strong>

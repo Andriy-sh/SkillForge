@@ -29,7 +29,7 @@ export default async function ConceptsSection({
   });
   if (!info) throw new Error("Concept not found");
   return (
-    <section className="flex flex-col gap-5">
+    <section className="flex flex-col gap-5 relative">
       <div className="space-y-5">
         <Breadcrumbs />
         <h1 className="text-5xl font-bold">{info.title}</h1>
@@ -39,7 +39,9 @@ export default async function ConceptsSection({
         </span>
         <div className="mt-5">{info.description}</div>
       </div>
-      <CodeBlockForm onCreate={createBlockContent} topicId={info.id} />
+      <div className="absolute top-0 right-0">
+        <CodeBlockForm onCreate={createBlockContent} topicId={info.id} />
+      </div>
 
       <ContentBlockSection topicId={info.id} />
     </section>

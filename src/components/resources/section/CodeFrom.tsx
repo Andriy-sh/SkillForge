@@ -1,6 +1,24 @@
 "use client";
 import { ContentBlockType } from "@prisma/client";
 import React, { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Plus } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Props = {
   topicId: string;
@@ -8,30 +26,18 @@ type Props = {
     topicId: string;
     type: ContentBlockType;
     content: string;
-    title: string;
+    title?: string;
+    description?: string;
   }) => void;
 };
 
-const CodeBlockForm: React.FC<Props> = ({ topicId, onCreate }) => {
+const CodeBlockFormModal: React.FC<Props> = ({ topicId, onCreate }) => {
+  const [open, setOpen] = useState(false);
+
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [type, setType] = useState<ContentBlockType>("EXAMPLE");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!content.trim()) return;
-
-    onCreate({
-      topicId,
-      type,
-      content,
-      title: title.trim(),
-    });
-
-    setTitle("");
-    setContent("");
-    setType("EXAMPLE");
-  };
 
   const typeLabels: Record<ContentBlockType, string> = {
     TEXT: "Text",
@@ -41,87 +47,122 @@ const CodeBlockForm: React.FC<Props> = ({ topicId, onCreate }) => {
     EXAMPLE: "Example",
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!content.trim()) return;
+
+    onCreate({
+      topicId,
+      type,
+      content:
+        type === "BULLETS"
+          ? JSON.stringify(
+              content
+                .split("\n")
+                .map((line) => line.trim())
+                .filter(Boolean)
+            )
+          : content,
+      title: title.trim() || undefined,
+      description: description.trim() || undefined,
+    });
+
+    setTitle("");
+    setDescription("");
+    setContent("");
+    setType("EXAMPLE");
+    setOpen(false);
+  };
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-4 bg-white border rounded-xl p-4 shadow-md"
-    >
-      <div>
-        <label className="font-semibold block mb-1">Block type</label>
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value as ContentBlockType)}
-          className="w-full border p-2 rounded"
-        >
-          {Object.entries(typeLabels).map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </div>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DialogTrigger asChild>
+            <button
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label="Додати блок"
+            >
+              <Plus className="w-5 h-5 text-gray-600 hover:text-blue-600" />
+            </button>
+          </DialogTrigger>
+        </TooltipTrigger>
+        <TooltipContent side="top">Add block</TooltipContent>
+      </Tooltip>
 
-      <div>
-        <label className="font-semibold block mb-1">Title (optional)</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full border p-2 rounded"
-          placeholder="E.g. Using let/const"
-        />
-      </div>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Add a Content Block</DialogTitle>
+          <DialogDescription>
+            Fill out the form to add a content block to the topic.
+          </DialogDescription>
+        </DialogHeader>
 
-      <div>
-        <label className="font-semibold block mb-1">
-          {type === "BULLETS"
-            ? "Bullets (one per line)"
-            : type === "CODE" || type === "EXAMPLE"
-            ? "Code"
-            : "Content"}
-        </label>
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          rows={6}
-          className="w-full border p-2 rounded font-mono"
-          placeholder={
-            type === "BULLETS"
-              ? "First item\nSecond item"
-              : type === "CODE" || type === "EXAMPLE"
-              ? 'const name = "Skillforge";\nconsole.log(name);'
-              : "Enter text..."
-          }
-        />
-      </div>
-
-      <button
-        type="submit"
-        className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
-      >
-        Add block
-      </button>
-
-      {content && (
-        <div className="mt-4">
-          <h3 className="font-bold mb-2">Preview:</h3>
-          {type === "CODE" || type === "EXAMPLE" ? (
-            <pre className="bg-gray-900 text-white p-4 rounded-xl overflow-auto text-sm whitespace-pre">
-              <code>{content}</code>
-            </pre>
-          ) : type === "BULLETS" ? (
-            <ul className="list-disc list-inside">
-              {content.split("\n").map((line, i) => (
-                <li key={i}>{line}</li>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label>Block Type</Label>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value as ContentBlockType)}
+              className="w-full border p-2 rounded"
+            >
+              {Object.entries(typeLabels).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
               ))}
-            </ul>
-          ) : (
-            <p>{content}</p>
-          )}
-        </div>
-      )}
-    </form>
+            </select>
+          </div>
+
+          <div>
+            <Label>Title (optional)</Label>
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="E.g. Using let/const"
+            />
+          </div>
+
+          <div>
+            <Label>Description (optional)</Label>
+            <Textarea
+              rows={2}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Brief explanation or context..."
+            />
+          </div>
+
+          <div>
+            <Label>
+              {type === "BULLETS"
+                ? "Bullets (one per line)"
+                : type === "CODE" || type === "EXAMPLE"
+                ? "Code"
+                : "Content"}
+            </Label>
+            <Textarea
+              rows={6}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="font-mono"
+              placeholder={
+                type === "BULLETS"
+                  ? "First item\nSecond item"
+                  : type === "CODE" || type === "EXAMPLE"
+                  ? 'const name = "Skillforge";\nconsole.log(name);'
+                  : "Enter text..."
+              }
+            />
+          </div>
+
+          <div className="flex justify-end">
+            <Button type="submit">Create Block</Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };
 
-export default CodeBlockForm;
+export default CodeBlockFormModal;

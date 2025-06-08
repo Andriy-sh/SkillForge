@@ -390,11 +390,12 @@ enum ContentBlockType {
 }
 
 model ContentBlock {
-  id      String           @id @default(cuid())
-  title   String
-  topicId String
-  type    ContentBlockType
-  content String
+  id         String           @id @default(cuid())
+  title      String?
+  topicId    String
+  type       ContentBlockType
+  description String?
+  content    String
 
   order Int
   topic ConceptTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)

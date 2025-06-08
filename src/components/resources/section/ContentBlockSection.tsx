@@ -8,5 +8,11 @@ export default async function ContentBlockSection({
   topicId: string;
 }) {
   const contentBlocks = await getContentBlocks(topicId);
-  return <SectionContentBlock blocks={contentBlocks} />;
+  const normalizedBlocks = contentBlocks.map((block) => ({
+    ...block,
+    title: block.title ?? undefined,
+    description: block.description ?? undefined,
+  }));
+
+  return <SectionContentBlock blocks={normalizedBlocks} />;
 }

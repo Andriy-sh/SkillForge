@@ -7,7 +7,8 @@ type CreateBlockInput = {
   topicId: string;
   type: ContentBlockType;
   content: string;
-  title: string;
+  title?: string;
+  description?: string;
 };
 
 export async function createBlockContent(data: CreateBlockInput) {
@@ -21,6 +22,7 @@ export async function createBlockContent(data: CreateBlockInput) {
       type: data.type,
       content: data.content,
       title: data.title,
+      description: data.description,
       order: count,
     },
   });
