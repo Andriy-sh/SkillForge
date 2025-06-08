@@ -18,6 +18,7 @@ export default async function page() {
     return <div>User not found</div>;
   }
   const friends = await getFriends(user.id);
+  console.log(friends);
   return (
     <div className="flex flex-col max-w-[1000px] mx-auto">
       <FriendsList friends={friends} userId={user.id} />

@@ -3,6 +3,7 @@ import { Friend } from "@/types/friends";
 import React, { useEffect, useState } from "react";
 import DeleteFriend from "./DeleteFriend";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function FriendsList({
   friends,
@@ -124,32 +125,40 @@ export default function FriendsList({
           </svg>
         </div>
       </div>
-      {filteredFriends.map((friend) => (
-        <div
-          key={friend.id}
-          className="flex items-center gap-3 p-4 bg-white justify-between rounded-lg shadow hover:bg-gray-50 transition"
-        >
-          <Link
-            href={`/profile/${friend.user.id}`}
-            className="flex items-center gap-3 flex-1"
+      {filteredFriends.map((friendship) => {
+        const isUserSender = friendship.userId === userId;
+        const friendData = isUserSender ? friendship.friend : friendship.user;
+
+        return (
+          <div
+            key={friendship.id}
+            className="flex items-center gap-3 p-4 bg-white justify-between rounded-lg shadow hover:bg-gray-50 transition"
           >
-            <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 font-bold text-lg">
-              {friend.user.name?.[0]}
+            <Link
+              href={`/profile/${friendData.id}`}
+              className="flex items-center gap-3 flex-1"
+            >
+              {friendData.image ? (
+                <Image alt="avatar" width={52} height={52} src={friendData.image} className="rounded-full" />
+              ) : (
+                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 font-bold text-lg">
+                  {friendData.name?.[0]}
+                </div>
+              )}
+
+              <div className="flex flex-col justify-center">
+                <span className="text-gray-800 font-medium">
+                  {friendData.name}
+                </span>
+                <span className="text-gray-500 text-sm">@{friendData.id}</span>
+              </div>
+            </Link>
+            <div>
+              <DeleteFriend id={friendship.id} onDelete={handleDelete} />
             </div>
-            <div className="flex flex-col justify-center">
-              <span className="text-gray-800 font-medium">
-                {friend.user.name}
-              </span>
-              <span className="text-gray-500 text-sm">@{friend.user.id}</span>
-            </div>
-          </Link>
-          <div>
-            {friend.userId && userId && (
-              <DeleteFriend id={friend.id} onDelete={handleDelete} />
-            )}
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

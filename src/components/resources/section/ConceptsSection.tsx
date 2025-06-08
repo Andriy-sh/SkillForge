@@ -2,7 +2,7 @@ import React from "react";
 import Breadcrumbs from "../ui/CurrentPathIndicator";
 import { getConcept } from "@/lib/actions/concepts/getConcept";
 import ContentBlockSection from "./ContentBlockSection";
-import CodeBlockForm from "./CodeFrom";
+import CodeBlockForm from "../form/CodeFrom";
 import { createBlockContent } from "@/lib/actions/contentBlock/createContentBlock";
 
 interface ConceptInterface {

@@ -27,15 +27,17 @@ model User {
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  friendships     Friendship[]      @relation("UserFriendships")
-  friendsWith     Friendship[]      @relation("UserFriendsWith")
-  Notification    Notification[]
-  Enrollment      Enrollment[]
-  CompletedUnit   CompletedUnit[]
-  CompletedModule CompletedModule[]
-  CompletedCourse CompletedCourse[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  friendships      Friendship[]      @relation("UserFriendships")
+  friendsWith      Friendship[]      @relation("UserFriendsWith")
+  Notification     Notification[]
+  Enrollment       Enrollment[]
+  CompletedUnit    CompletedUnit[]
+  CompletedModule  CompletedModule[]
+  CompletedCourse  CompletedCourse[]
+  sentMessages     Message[]         @relation("SentMessages")
+  receivedMessages Message[]         @relation("ReceivedMessages")
 }
 
 model Account {
@@ -111,6 +113,17 @@ model Friendship {
   friend    User     @relation("UserFriendsWith", fields: [friendId], references: [id], onDelete: Cascade)
 
   @@unique([userId, friendId])
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  content    String
+  createdAt  DateTime @default(now())
+
+  sender   User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
 }
 
 enum NotificationType {
@@ -390,12 +403,12 @@ enum ContentBlockType {
 }
 
 model ContentBlock {
-  id         String           @id @default(cuid())
-  title      String?
-  topicId    String
-  type       ContentBlockType
+  id          String           @id @default(cuid())
+  title       String?
+  topicId     String
+  type        ContentBlockType
   description String?
-  content    String
+  content     String
 
   order Int
   topic ConceptTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
