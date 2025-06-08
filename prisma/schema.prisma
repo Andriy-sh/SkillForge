@@ -387,11 +387,11 @@ enum ContentBlockType {
   CODE
   NOTE
   EXAMPLE
-  IMAGE
 }
 
 model ContentBlock {
   id      String           @id @default(cuid())
+  title   String
   topicId String
   type    ContentBlockType
   content String

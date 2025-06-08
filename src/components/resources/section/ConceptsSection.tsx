@@ -1,6 +1,9 @@
 import React from "react";
 import Breadcrumbs from "../ui/CurrentPathIndicator";
 import { getConcept } from "@/lib/actions/concepts/getConcept";
+import ContentBlockSection from "./ContentBlockSection";
+import CodeBlockForm from "./CodeFrom";
+import { createBlockContent } from "@/lib/actions/contentBlock/createContentBlock";
 
 interface ConceptInterface {
   id: string;
@@ -36,6 +39,9 @@ export default async function ConceptsSection({
         </span>
         <div className="mt-5">{info.description}</div>
       </div>
+      <CodeBlockForm onCreate={createBlockContent} topicId={info.id} />
+
+      <ContentBlockSection topicId={info.id} />
     </section>
   );
 }
