@@ -29,7 +29,11 @@ const FooterSection = ({
 export default function Footer() {
   const pathname = usePathname();
 
-  if (pathname === "/login" || pathname === "/signup") {
+  if (
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname.startsWith("/chat")
+  ) {
     return null;
   }
 
