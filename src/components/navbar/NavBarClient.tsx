@@ -64,6 +64,7 @@ export default function NavBarClient({
             name="Resourses"
             type="Resources"
           />
+          <NavItemLink href="/chat" label="Chats" />
         </div>
         <div className="flex space-x-4">
           {session && user ? (
