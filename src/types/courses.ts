@@ -67,3 +67,7 @@ export interface En {
   isCompleted: boolean;
   course: CourseInterface;
 }
+
+export type S  = {
+  s:string
+}
