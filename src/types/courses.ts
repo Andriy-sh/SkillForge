@@ -71,3 +71,6 @@ export interface En {
 export type S  = {
   s:string
 }
+export type D = {
+  d:string
+}
